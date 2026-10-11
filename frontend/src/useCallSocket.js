@@ -1,0 +1,65 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+const RECONNECT_MS = 1000
+
+// One WebSocket to the backend's /ws/call. Reconnects on its own, so the
+// backend can be started (or restarted) after the page is open.
+export function useCallSocket() {
+  const wsRef = useRef(null)
+  const [connected, setConnected] = useState(false)
+  const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
+  const [lastChunk, setLastChunk] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    let closedByUs = false
+    let retry
+
+    function connect() {
+      const ws = new WebSocket(`ws://${location.host}/ws/call`)
+      wsRef.current = ws
+
+      ws.onmessage = (e) => {
+        const msg = JSON.parse(e.data)
+        if (msg.type === 'status') {
+          if (msg.state) setCallState(msg.state)
+          else setConnected(true)
+        } else if (msg.type === 'chunk') {
+          setLastChunk(msg)
+        } else if (msg.type === 'error') {
+          setError(msg.message)
+        }
+      }
+
+      ws.onclose = () => {
+        setConnected(false)
+        setCallState((s) => (s === 'started' ? 'stopped' : s))
+        if (!closedByUs) retry = setTimeout(connect, RECONNECT_MS)
+      }
+    }
+
+    connect()
+    return () => {
+      closedByUs = true
+      clearTimeout(retry)
+      wsRef.current?.close()
+    }
+  }, [])
+
+  const send = useCallback((msg) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) wsRef.current.send(JSON.stringify(msg))
+  }, [])
+
+  const start = useCallback(
+    (sample) => {
+      setError(null)
+      setLastChunk(null)
+      send({ type: 'start', mode: 'demo', sample })
+    },
+    [send],
+  )
+
+  const stop = useCallback(() => send({ type: 'stop' }), [send])
+
+  return { connected, callState, lastChunk, error, start, stop }
+}
