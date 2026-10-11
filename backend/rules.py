@@ -4,7 +4,7 @@ Instant and explainable, and works even when the LLM is slow. The score comes
 from how many categories are hit, not how many keywords, so one category alone
 stays green and several together go red.
 
-Tuned only on the demo call scripts in samples/scripts, never on eval/.
+Tuned on the demo call scripts in samples/scripts and on eval/dev only, never on the test sets.
 """
 
 import re
@@ -19,6 +19,18 @@ CATEGORIES = {
         (r"\bwire\b|wire transfer|western union|moneygram|zelle|venmo|cash app", 1.0),
         (r"bail money|\bbail\b", 1.0),
         (r"scratch off the back|read me the numbers", 1.0),
+        (r"cashier'?s check|money order|prepaid (debit )?card", 1.0),
+        # Moving savings to a "safe" account, or paying into an escrow/new account.
+        (r"(safe|secure|protected|holding|escrow) account|transfer (the|your) (full |entire |whole )?balance", 1.0),
+        (r"(switched|changed|new) (banks?|account|bank details|payment details)", 0.5),
+        # Someone coming to the house (or the bank) to collect cash.
+        (r"(courier|driver|deputy|agent|someone|runner)\b.{0,40}\b(pick up|collect) (the |your )?(cash|money|payment|check|envelope)", 1.0),
+        (r"(courier|deputy|agent|runner)\b.{0,40}\b(pick (it |them )?up|collect (it|them))", 1.0),
+        (r"withdraw\b.{0,25}\bcash", 1.0),
+        (r"take out .{0,20}cash", 0.5),
+        (r"(filing|processing|release|customs|clearance|unlock) fee", 1.0),
+        (r"\bbond (of|today|money)\b|pay (the|a|her|his) bond", 1.0),
+        (r"guaranteed (returns?|profit)|returns? of \d+ ?(percent|%)|risk[- ]free", 0.5),
         # Whisper writes spoken amounts as digits ("two thousand dollars" -> "$2,000").
         (r"\$\s?\d[\d,]*|\b\d[\d,]* dollars|\b(hundred|thousand) dollars", 0.5),
     ],
@@ -26,12 +38,18 @@ CATEGORIES = {
         (r"right now|immediately|right away|as soon as possible", 1.0),
         (r"before it'?s too late|within the hour|in the next (minute|hour)|hurry", 1.0),
         (r"emergency|urgent", 0.5),
+        (r"act now|move now|window closes", 1.0),
+        (r"last chance|until the \w+ arrives", 0.5),
+        (r"(by|before) (tomorrow|tonight|end of (the )?day)|late fees?|or (else|the funds)", 0.5),
     ],
     "secrecy": [
         (r"don'?t tell|do not tell|do not speak to anyone|don'?t speak to anyone", 1.0),
         (r"keep (this|it) (between us|a secret|quiet)|confidential", 1.0),
         (r"don'?t hang up|do not hang up|stay on the line|if you hang up", 1.0),
         (r"don'?t call (the|your) (bank|branch|police)", 1.0),
+        (r"(keep|handle|leave|just) (it |this |that )?between us|between (you and me|us) for now|gag order|(staff|employees|teller)s? (may|might|could) be involved", 1.0),
+        (r"(cannot|can'?t|not to|don'?t|shouldn'?t) (tell|discuss|mention)\b.{0,25}\b(anyone|family|bank|branch|relatives)", 1.0),
+        (r"settle it quietly|keep your phone with you", 0.5),
     ],
     "impersonation": [
         (r"\birs\b|internal revenue|social security (administration|office)", 1.0),
@@ -39,11 +57,24 @@ CATEGORIES = {
         (r"(fraud|security) (department|team)|from (your|the) bank|\bbank\b", 1.0),
         (r"microsoft|apple support|tech(nical)? support|medicare", 1.0),
         (r"\bgrand(ma|pa|mother|father)\b|it'?s me\b", 0.5),
+        (r"account security|security office", 1.0),
+        (r"customer care team", 0.5),
+        (r"\b(sergeant|deputy|detective|public defender)\b|summons|court (order|requirement|fees?|date)", 1.0),
+        (r"\bcourt\b|\bjudge\b|citation", 0.5),
+        (r"fraud recovery|recovered your (funds|money)", 1.0),
+        (r"unusual (traffic|activity)|(computer|network|device) (is|has been) (hacked|infected|compromised)|virus (on|in) your", 0.5),
     ],
     "credential_request": [
         (r"read me (the|that|your) code|verification code|security code|the code we (sent|texted)", 1.0),
         (r"\bpin\b|password|account number|routing number", 1.0),
         (r"social security number|\bssn\b|card number|medicare number", 1.0),
+        # Reading back a code from a text, or a remote-access number.
+        (r"read (me )?(the|those|that) (\w+ )?(numbers?|digits?) (in|from|on)", 1.0),
+        (r"read (it|that|them) (back )?to me", 0.5),
+        # Remote-access apps let a scammer control the computer.
+        (r"remote (access|desktop|control)|anydesk|teamviewer|quick ?assist|accept the connection", 1.0),
+        (r"install (a|an|the|this) (small |quick |free )?(app|program|software)", 0.5),
+        (r"log ?in to your (bank|account) (so|while)", 1.0),
     ],
 }
 
@@ -57,6 +88,7 @@ NEGATION = re.compile(r"\b(never|not|won'?t|don'?t|doesn'?t) (ask|need|request)\
 # Score by effective number of categories hit (strengths summed), interpolated.
 SCORE_BY_CATEGORIES = [0, 25, 55, 80, 92, 100]
 ASK_BONUS = 10  # a concrete ask for money or a code, alongside another signal
+ASK_PAIR_FLOOR = 85  # clear ask + another clear category: high enough to alert on the next line
 
 # Short phrases for the reason sentence, most important first. Only the top two are used.
 REASONS = {
@@ -88,6 +120,13 @@ def score(text: str) -> dict:
     asks = strengths.get("payment_request", 0) == 1.0 or strengths.get("credential_request", 0) == 1.0
     if asks and n >= 2:
         risk += ASK_BONUS
+    # A clear ask for money or a code, plus one other clear sign (a claimed authority,
+    # secrecy, or a second kind of ask), is the core of almost every phone scam: go red.
+    # Urgency alone doesn't count as the partner: "got him a gift card, call me right now"
+    # is ordinary family talk.
+    strong = sum(1 for c, v in strengths.items() if v == 1.0 and c != "urgency")
+    if asks and strong >= 2:
+        risk = max(risk, ASK_PAIR_FLOOR)
     risk = min(100, round(risk))
 
     signals = sorted(strengths, key=lambda c: -strengths[c])
