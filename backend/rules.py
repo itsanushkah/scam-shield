@@ -80,7 +80,7 @@ def score(text: str) -> dict:
             for m in pattern.finditer(text):
                 if cat in NEGATABLE and NEGATION.search(text[max(0, m.start() - 80) : m.start()]):
                     continue
-                matches.append({"signal": cat, "phrase": m.group(0)})
+                matches.append({"signal": cat, "phrase": m.group(0), "strength": strength})
                 strengths[cat] = max(strengths.get(cat, 0), strength)
 
     n = sum(strengths.values())
