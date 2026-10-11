@@ -13,6 +13,7 @@ Built solo at **c0mpiled-15** (Penn State, Oct 11 2026) · YC Request for Startu
 - **Live transcript** of the call in large, readable text.
 - **Risk meter** from green to yellow to red, with the reasons **building up as the call goes on**: *Asking for money: "bail money", "gift cards"* · *Wants it kept secret: "don't tell"* · *Rushing you: "right now"*.
 - **Full-screen warning** when the call turns red, with one clear instruction and a big **Hang up** button.
+- **"Is it really Ethan?"** When the caller claims to be family and the call looks wrong, it suggests how to check, using the name they gave: ask something only Ethan would know, ask for the family safe word, or hang up and call him back. *It doesn't just flag the scam: it tells Grandma how to prove who's really calling.*
 - **Call summary** at the end: the verdict, when the warning fired, what the caller did and said, and what to do now.
 - **Live** mode listens through the microphone (put a call on speaker nearby). **Recording** mode plays a test call out loud.
 
