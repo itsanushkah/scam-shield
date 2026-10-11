@@ -13,11 +13,15 @@ base.en is used rather than small.en: on short windows it was as accurate and
 several times faster (small.en couldn't keep up with real time on this CPU).
 """
 
+import time
+
 import numpy as np
 from faster_whisper import WhisperModel
 
 MODEL_NAME = "base.en"
 CONTEXT_S = 6.0  # seconds of audio each decode hears
+FAST_CONTEXT_S = 3.0  # used instead while decoding is falling behind
+SLOW_DECODE_S = 1.5  # a decode slower than this means we're falling behind (chunks come every 2.5 s)
 SILENCE_RMS = 0.003  # chunks quieter than this are skipped (Whisper invents text on silence)
 EDGE_S = 0.15  # words ending this close to a chunk's end wait for the next chunk
 SLACK_S = 0.05  # timestamp jitter allowed when comparing against the last word
@@ -43,6 +47,7 @@ class Transcriber:
         self.tail = []  # last few emitted words, normalized, for catching repeats
         self.audio = np.zeros(0, dtype=np.float32)  # the last CONTEXT_S seconds heard
         self.audio_end = 0.0  # call time at the end of self.audio
+        self.last_decode_s = 0.0
 
     def feed(self, chunk: np.ndarray, t_start: float, t_end: float, is_last: bool) -> list[dict]:
         """Return the new words in this chunk as [{"word", "start", "end"}] in call time."""
@@ -51,8 +56,11 @@ class Transcriber:
             return []
 
         # Decode the last CONTEXT_S seconds, but only words after the cursor are new.
-        window = self.audio
+        # If the laptop is struggling (low memory, LLM busy), drop to a shorter window to keep up.
+        context = FAST_CONTEXT_S if self.last_decode_s > SLOW_DECODE_S else CONTEXT_S
+        window = self.audio[-int(context * 16000) :]
         t_start = t_end - len(window) / 16000
+        started = time.monotonic()
 
         segments, _ = load_model().transcribe(
             window,
@@ -78,6 +86,7 @@ class Transcriber:
                 continue
             break
 
+        self.last_decode_s = time.monotonic() - started
         words = self._drop_repeat(words)
         if words:
             self.cursor = words[-1]["end"]
