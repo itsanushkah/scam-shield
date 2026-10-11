@@ -20,7 +20,7 @@ export default function PhoneFrame({ children }) {
     <div className="relative h-[min(820px,calc(100dvh-2rem))] w-[min(400px,100%)] rounded-[3.25rem] border-[12px] border-neutral-900 bg-neutral-900 shadow-2xl ring-1 ring-neutral-700">
       <div className="absolute left-1/2 top-2 z-10 h-7 w-32 -translate-x-1/2 rounded-full bg-black" />
 
-      <div className="flex h-full flex-col overflow-hidden rounded-[2.5rem] bg-slate-950 text-white">
+      <div className="relative flex h-full flex-col overflow-hidden rounded-[2.5rem] bg-slate-950 text-white">
         <StatusBar />
         {children}
       </div>

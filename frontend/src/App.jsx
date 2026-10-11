@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import AlertBanner from './AlertBanner.jsx'
 import PhoneFrame from './PhoneFrame.jsx'
 import RiskMeter from './RiskMeter.jsx'
 import Transcript from './Transcript.jsx'
@@ -8,6 +9,10 @@ import { useCallSocket } from './useCallSocket.js'
 export default function App() {
   const call = useCallSocket()
   const live = call.callState === 'started'
+  // The warning shows once per call; "Keep listening" or "Hang up" closes it for that call.
+  const [dismissedCall, setDismissedCall] = useState(null)
+  const showAlert = call.alert && dismissedCall !== call.callNumber
+  const dismiss = () => setDismissedCall(call.callNumber)
 
   return (
     <main className="flex min-h-screen flex-wrap items-center justify-center gap-8 bg-slate-200 p-4">
@@ -19,6 +24,22 @@ export default function App() {
         <Transcript lines={call.transcript} live={live} />
 
         <CallControls onEnd={call.stop} disabled={!live} />
+
+        {showAlert && (
+          <AlertBanner
+            // Live reason, not the one frozen in the alert: if the LLM fired first, the
+            // clearer rule reason ("wants gift cards") replaces it a moment later.
+            alert={{
+              reason: call.score?.reason || call.alert.reason,
+              suggested_action: call.score?.suggested_action || call.alert.suggested_action,
+            }}
+            onHangUp={() => {
+              call.stop()
+              dismiss()
+            }}
+            onDismiss={dismiss}
+          />
+        )}
       </PhoneFrame>
 
       <DemoPanel call={call} />
