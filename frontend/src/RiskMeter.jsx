@@ -54,7 +54,7 @@ function Evidence({ rows, chip }) {
           <span className="text-base font-bold">{SIGNAL_WORDS[row.signal] ?? row.signal}</span>
           {row.phrases.length > 0 && (
             <span className="ml-1.5 inline-flex flex-wrap gap-1 align-middle">
-              {row.phrases.map((p) => (
+              {row.phrases.slice(0, 2).map((p) => (
                 <span key={p} className={`evidence-in rounded-md px-1.5 py-0.5 text-sm ${chip}`}>
                   “{p}”
                 </span>
