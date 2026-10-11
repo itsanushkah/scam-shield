@@ -1,0 +1,87 @@
+{
+  "id": "scam_bank_code",
+  "label": "scam",
+  "title": "Fake bank fraud call that steals a one-time code (contrast with the legit bank call)",
+  "alert_line": 6,
+  "alert_by_seconds": 39.83,
+  "duration_s": 64.0,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 5.85,
+      "text": "Hello, this is Mark from the security team at First Valley Bank. Is this Robert Chen?"
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 6.3,
+      "end": 8.95,
+      "text": "Yes, this is Robert."
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 9.4,
+      "end": 16.07,
+      "text": "Robert, someone is trying to take money out of your checking account right now. I need to move quickly to stop it."
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 16.52,
+      "end": 19.0,
+      "text": "Oh no. What's happening?"
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 19.45,
+      "end": 27.8,
+      "text": "They're trying to wire two thousand dollars overseas. I can freeze your account, but I need to verify that you're the real owner."
+    },
+    {
+      "i": 5,
+      "speaker": "you",
+      "start": 28.25,
+      "end": 30.93,
+      "text": "Okay, how do I do that?"
+    },
+    {
+      "i": 6,
+      "speaker": "caller",
+      "start": 31.38,
+      "end": 39.83,
+      "text": "We just texted a six digit verification code to your phone. Please read me that code right now so I can stop the transfer."
+    },
+    {
+      "i": 7,
+      "speaker": "you",
+      "start": 40.27,
+      "end": 44.35,
+      "text": "The text says the bank will never ask for this code."
+    },
+    {
+      "i": 8,
+      "speaker": "caller",
+      "start": 44.8,
+      "end": 53.3,
+      "text": "That message is for other situations. This is an emergency, sir. If you don't read me the code in the next minute, the money is gone."
+    },
+    {
+      "i": 9,
+      "speaker": "you",
+      "start": 53.75,
+      "end": 57.02,
+      "text": "I don't know. This doesn't feel right."
+    },
+    {
+      "i": 10,
+      "speaker": "caller",
+      "start": 57.48,
+      "end": 63.5,
+      "text": "Please, sir, don't hang up, and don't call the branch, they can't help with this. Just read me the code."
+    }
+  ]
+}

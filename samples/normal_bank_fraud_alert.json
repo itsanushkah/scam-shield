@@ -1,0 +1,85 @@
+{
+  "id": "normal_bank_fraud_alert",
+  "label": "normal",
+  "title": "Legit bank fraud alert (hard negative: bank + card + account talk, never asks for codes)",
+  "duration_s": 84.0,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 8.6,
+      "text": "Hi, this is Rachel from the fraud department at First Valley Bank. Is this Robert Chen?"
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 9.05,
+      "end": 11.7,
+      "text": "Yes, this is Robert."
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 12.15,
+      "end": 27.3,
+      "text": "Thanks, Robert. We noticed an unusual charge on your debit card and wanted to check with you. Did you make a purchase at an electronics store in Ohio this morning?"
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 27.75,
+      "end": 31.85,
+      "text": "No, I've been home all day. I didn't buy anything."
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 32.3,
+      "end": 41.97,
+      "text": "Okay, thank you. I've blocked that charge, and we'll send you a new card in the mail within five to seven days."
+    },
+    {
+      "i": 5,
+      "speaker": "you",
+      "start": 42.42,
+      "end": 45.52,
+      "text": "Oh good. Do you need anything from me?"
+    },
+    {
+      "i": 6,
+      "speaker": "caller",
+      "start": 45.97,
+      "end": 57.02,
+      "text": "No, nothing at all. And just so you know, we will never ask you for your PIN, your password, or a code we text you."
+    },
+    {
+      "i": 7,
+      "speaker": "you",
+      "start": 57.47,
+      "end": 59.72,
+      "text": "That's good to know."
+    },
+    {
+      "i": 8,
+      "speaker": "caller",
+      "start": 60.17,
+      "end": 73.97,
+      "text": "If you want to double check this call, you can hang up and dial the number on the back of your card. Anyone there can see this note on your account."
+    },
+    {
+      "i": 9,
+      "speaker": "you",
+      "start": 74.42,
+      "end": 78.22,
+      "text": "I appreciate that. Thank you for catching it."
+    },
+    {
+      "i": 10,
+      "speaker": "caller",
+      "start": 78.67,
+      "end": 83.5,
+      "text": "You're welcome, Robert. Have a good rest of your day."
+    }
+  ]
+}

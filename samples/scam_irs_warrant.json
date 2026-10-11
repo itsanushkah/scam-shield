@@ -1,0 +1,87 @@
+{
+  "id": "scam_irs_warrant",
+  "label": "scam",
+  "title": "Government impersonation: fake IRS agent threatening arrest",
+  "alert_line": 6,
+  "alert_by_seconds": 46.05,
+  "duration_s": 71.1,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 7.55,
+      "text": "Hello, this is Officer Daniel Brooks with the Internal Revenue Service. Am I speaking with Margaret Hill?"
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 8.0,
+      "end": 11.62,
+      "text": "Yes, this is Margaret. What is this about?"
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 12.07,
+      "end": 19.35,
+      "text": "Ma'am, our records show you owe four thousand two hundred dollars in back taxes from the last three years."
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 19.8,
+      "end": 24.27,
+      "text": "That can't be right. My son does my taxes every year."
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 24.73,
+      "end": 32.43,
+      "text": "I understand, ma'am, but there is a warrant out for your arrest. Local police will be at your home within the hour."
+    },
+    {
+      "i": 5,
+      "speaker": "you",
+      "start": 32.88,
+      "end": 36.12,
+      "text": "The police? Oh dear. What do I do?"
+    },
+    {
+      "i": 6,
+      "speaker": "caller",
+      "start": 36.58,
+      "end": 46.05,
+      "text": "You can resolve this today. You must make a payment immediately, using Bitcoin or gift cards. That is the only way to cancel the warrant."
+    },
+    {
+      "i": 7,
+      "speaker": "you",
+      "start": 46.5,
+      "end": 49.42,
+      "text": "I don't even know what Bitcoin is."
+    },
+    {
+      "i": 8,
+      "speaker": "caller",
+      "start": 49.88,
+      "end": 59.25,
+      "text": "That's alright, I will stay on the line and walk you through it. Do not speak to anyone else about this case, including your son. It is confidential."
+    },
+    {
+      "i": 9,
+      "speaker": "you",
+      "start": 59.7,
+      "end": 63.0,
+      "text": "I'm very scared. Can I call you back?"
+    },
+    {
+      "i": 10,
+      "speaker": "caller",
+      "start": 63.45,
+      "end": 70.65,
+      "text": "No ma'am. If you hang up, the warrant goes into effect automatically. Do you have your purse with you right now?"
+    }
+  ]
+}

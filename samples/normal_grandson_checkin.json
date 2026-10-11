@@ -1,0 +1,99 @@
+{
+  "id": "normal_grandson_checkin",
+  "label": "normal",
+  "title": "Real grandson checking in (hard negative: says 'Grandma, it's me')",
+  "duration_s": 64.8,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 2.65,
+      "text": "Hey Grandma, it's me, Ethan!"
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 3.1,
+      "end": 6.93,
+      "text": "Ethan! Oh, what a nice surprise. How are you, sweetheart?"
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 7.38,
+      "end": 13.4,
+      "text": "I'm good. Classes are busy, but I finally finished my big project this week."
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 13.85,
+      "end": 17.73,
+      "text": "Oh, I'm so proud of you. Are you eating enough up there?"
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 18.18,
+      "end": 23.48,
+      "text": "I am, I promise. Mom keeps sending me those frozen lasagnas."
+    },
+    {
+      "i": 5,
+      "speaker": "you",
+      "start": 23.93,
+      "end": 27.62,
+      "text": "Good. Your mother always did make the best lasagna."
+    },
+    {
+      "i": 6,
+      "speaker": "caller",
+      "start": 28.08,
+      "end": 36.3,
+      "text": "So I was thinking, I'm coming home for Thanksgiving. Can I bring my roommate, Jake? His family is too far away."
+    },
+    {
+      "i": 7,
+      "speaker": "you",
+      "start": 36.75,
+      "end": 41.05,
+      "text": "Of course you can. The more the merrier. Does he like pumpkin pie?"
+    },
+    {
+      "i": 8,
+      "speaker": "caller",
+      "start": 41.5,
+      "end": 45.95,
+      "text": "He loves it. I told him yours is the best in the state."
+    },
+    {
+      "i": 9,
+      "speaker": "you",
+      "start": 46.4,
+      "end": 49.3,
+      "text": "Well, now I have to make two of them."
+    },
+    {
+      "i": 10,
+      "speaker": "caller",
+      "start": 49.75,
+      "end": 56.75,
+      "text": "Ha, perfect. Alright Grandma, I have to run to class. I'll call you on Sunday like always."
+    },
+    {
+      "i": 11,
+      "speaker": "you",
+      "start": 57.2,
+      "end": 61.2,
+      "text": "Okay honey. I love you. Drive safe when you come home."
+    },
+    {
+      "i": 12,
+      "speaker": "caller",
+      "start": 61.65,
+      "end": 64.35,
+      "text": "Love you too. Bye Grandma!"
+    }
+  ]
+}
