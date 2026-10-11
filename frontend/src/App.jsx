@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import PhoneFrame from './PhoneFrame.jsx'
+import Transcript from './Transcript.jsx'
 import { useCallSocket } from './useCallSocket.js'
 
 export default function App() {
@@ -18,16 +19,7 @@ export default function App() {
           <p className="text-lg text-emerald-100">No warning signs yet</p>
         </section>
 
-        {/* Live transcript goes here (part 5). */}
-        <section className="mx-5 mt-4 flex-1 overflow-y-auto rounded-2xl bg-slate-900 p-5">
-          {call.lastChunk ? (
-            <p className="text-lg tabular-nums text-slate-400">
-              Hearing {call.lastChunk.t_start.toFixed(1)}s – {call.lastChunk.t_end.toFixed(1)}s
-            </p>
-          ) : (
-            <p className="text-lg text-slate-400">The conversation will appear here.</p>
-          )}
-        </section>
+        <Transcript lines={call.transcript} live={live} />
 
         <CallControls onEnd={call.stop} disabled={!live} />
       </PhoneFrame>

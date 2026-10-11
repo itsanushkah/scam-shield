@@ -8,7 +8,7 @@ export function useCallSocket() {
   const wsRef = useRef(null)
   const [connected, setConnected] = useState(false)
   const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
-  const [lastChunk, setLastChunk] = useState(null)
+  const [transcript, setTranscript] = useState([])
   const [error, setError] = useState(null)
   const [callNumber, setCallNumber] = useState(0)
 
@@ -25,8 +25,8 @@ export function useCallSocket() {
         if (msg.type === 'status') {
           if (msg.state) setCallState(msg.state)
           else setConnected(true)
-        } else if (msg.type === 'chunk') {
-          setLastChunk(msg)
+        } else if (msg.type === 'transcript') {
+          setTranscript((lines) => [...lines, { text: msg.text, t: msg.t }])
         } else if (msg.type === 'error') {
           setError(msg.message)
         }
@@ -54,7 +54,7 @@ export function useCallSocket() {
   const start = useCallback(
     (sample) => {
       setError(null)
-      setLastChunk(null)
+      setTranscript([])
       setCallNumber((n) => n + 1)
       send({ type: 'start', mode: 'demo', sample })
     },
@@ -63,5 +63,5 @@ export function useCallSocket() {
 
   const stop = useCallback(() => send({ type: 'stop' }), [send])
 
-  return { connected, callState, callNumber, lastChunk, error, start, stop }
+  return { connected, callState, callNumber, transcript, error, start, stop }
 }
