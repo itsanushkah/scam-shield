@@ -1,0 +1,215 @@
+{
+  "_about": "Fresh blind test set, written without seeing the detector. 15 scam + 15 normal. Never used for tuning.",
+  "items": [
+    {
+      "id": "fresh_scam_01_secure_account_transfer",
+      "label": "scam",
+      "type": "fake bank fraud department moves savings to a 'secure account'",
+      "hard": true,
+      "text": "Caller: Hi Mrs. Delgado, this is Kevin from the fraud team at Lakeshore Federal. We noticed someone opened a new line of credit in your name this morning.\nYou: Oh my goodness, I didn't open anything.\nCaller: I know, ma'am, that's why I'm calling. It looks like someone inside your branch may be involved, so please don't discuss this with the tellers.\nYou: What should I do then?\nCaller: We're going to protect your savings by moving them into a safe holding account that only you can access. I'll give you the routing details.\nYou: How much do I move?\nCaller: The full balance, about 38,000. Once the investigation closes in a few days we move it right back.\nCaller: Do it today if you can, the person who did this could empty the account tonight."
+    },
+    {
+      "id": "fresh_scam_02_courier_cash_pickup",
+      "label": "scam",
+      "type": "grandchild emergency with courier picking up cash at the door",
+      "hard": true,
+      "text": "Caller: Grandma? It's me. I'm okay but I got in a car accident and my nose is kind of broken so I sound weird.\nYou: Tyler? Oh honey, are you hurt?\nCaller: I'm fine, but the other driver was pregnant and they're saying it's my fault. My lawyer Mr. Haines says if I post the bond today it all goes away.\nYou: How much is it?\nCaller: Nine thousand. Please don't call Mom, she'll freak out.\nCaller: Mr. Haines is sending someone from his office to your house to pick it up in an envelope this afternoon. Just put it in cash.\nYou: I'd have to go to the bank.\nCaller: If the bank asks just tell them it's for a home repair, okay? Thank you Grandma, I love you."
+    },
+    {
+      "id": "fresh_scam_03_text_code_account_takeover",
+      "label": "scam",
+      "type": "caller asks victim to read back a code sent by text",
+      "hard": true,
+      "text": "Caller: Good afternoon, this is the security desk at Pinecrest Mobile. We're updating your account to the new network and need to confirm you're the owner.\nYou: Okay, what do you need?\nCaller: I just sent a six digit number to your phone. Can you read it back to me?\nYou: Let me find my glasses. It says do not share this with anyone.\nCaller: Yes, that's a standard message, it just means don't share it with strangers. I'm with the company so it's fine.\nYou: It's 4 8 1 9 0 3.\nCaller: Perfect. You might lose service for a little while, don't worry about it, that's the upgrade."
+    },
+    {
+      "id": "fresh_scam_04_remote_access_app",
+      "label": "scam",
+      "type": "tech support asks to install a screen sharing app",
+      "hard": true,
+      "text": "Caller: Hello, I'm calling from the computer security center. Your computer has been sending us error reports, it's infected with a virus.\nYou: Really? It has been a bit slow.\nCaller: Yes, that's the virus. I can fix it for you. Please go to your computer and open the internet.\nYou: Okay, it's open.\nCaller: Type in the address I give you and download the program called QuickHelpDesk. It lets me see your screen so I can clean it.\nYou: Is that safe?\nCaller: Totally safe, ma'am, we do this for thousands of customers. Then log in to your online banking so I can check the hackers didn't take anything."
+    },
+    {
+      "id": "fresh_scam_05_refund_overpayment",
+      "label": "scam",
+      "type": "fake refund overpayment, victim asked to send the difference back",
+      "hard": true,
+      "text": "Caller: Hi sir, this is Daniel from the billing department about your antivirus subscription. We're issuing you a refund of 299 dollars because the service was cancelled.\nYou: I don't remember having that, but okay.\nCaller: I'm connected to your computer now to process it. Oh no. I typed 29,900 instead of 299 by mistake.\nYou: Oh dear, that's a lot.\nCaller: Sir, please, I could lose my job. Can you check your account, you'll see the extra money.\nYou: It does say there's more money in savings.\nCaller: Please send back the extra 29,600 today. My manager says the fastest way is for you to go to the store and buy prepaid cards, I'll stay on the line with you."
+    },
+    {
+      "id": "fresh_scam_06_medicare_brace",
+      "label": "scam",
+      "type": "fake Medicare benefit asking for the Medicare number",
+      "hard": true,
+      "text": "Caller: Hello, I'm calling with the senior benefits office. You qualify for a free back brace and knee brace under your Medicare plan at no cost to you.\nYou: Oh, my knees do bother me.\nCaller: Wonderful. To send it out I just need to verify your Medicare number. It's on the red white and blue card.\nYou: Hold on, let me get it.\nCaller: Take your time. We also have a free genetic test this month, a nurse can come swab your cheek.\nYou: Okay, the number starts with 1 E G 4.\nCaller: Go ahead and read the rest, and your date of birth please."
+    },
+    {
+      "id": "fresh_scam_07_police_recovery_scam",
+      "label": "scam",
+      "type": "fake police officer offering to recover money lost to an earlier scam, for a fee",
+      "hard": true,
+      "text": "Caller: Good morning ma'am, this is Detective Sergeant Moore with the financial crimes unit. Last spring you lost money to a lottery scam, is that right?\nYou: Yes, I lost about four thousand dollars. I was so embarrassed.\nCaller: Good news. We arrested the group and recovered your funds. We can return 4,200 to you.\nYou: Oh, thank heavens.\nCaller: There is a small court processing fee of 350 dollars before the money can be released. It has to be paid before Friday or the funds go to the state.\nYou: Can't you take it out of the 4,200?\nCaller: No ma'am, the law doesn't allow that. You can mail a cashier's check to the address I give you."
+    },
+    {
+      "id": "fresh_scam_08_government_grant_fee",
+      "label": "scam",
+      "type": "fake federal grant requiring an upfront fee",
+      "hard": true,
+      "text": "Caller: Congratulations, you've been selected for a federal home improvement grant of 9,500 dollars because you've paid your taxes on time.\nYou: A grant? I didn't apply for anything.\nCaller: You don't need to apply, it's awarded to good citizens. You never have to pay it back.\nYou: Well that sounds very nice.\nCaller: There is a one-time processing charge of 199 dollars. Once that clears the grant is deposited straight into your bank.\nYou: How do I pay it?\nCaller: I can take your checking account and routing number right now over the phone."
+    },
+    {
+      "id": "fresh_scam_09_voice_clone_payment_app",
+      "label": "scam",
+      "type": "voice-clone daughter emergency with odd payment app request",
+      "hard": true,
+      "text": "Caller: Dad, it's Jenny. I'm stuck in Mexico, my purse got stolen with my passport and my phone.\nYou: Jenny? Where's Mark? Why aren't you calling from your phone?\nCaller: I'm borrowing a phone from the hotel. Mark went to the embassy. I need money for a hotel and a new ticket.\nYou: Of course, how much?\nCaller: 2,800. Can you send it on that payment app to my friend Carla's account? She's helping me. I'll text you her name.\nYou: Why not to you?\nCaller: I can't log in without my phone. Please hurry Dad, and don't post anything about this."
+    },
+    {
+      "id": "fresh_scam_10_irs_arrest_threat",
+      "label": "scam",
+      "type": "classic IRS impersonation with arrest threat and gift cards",
+      "hard": false,
+      "text": "Caller: This is Officer Brandon Clark with the IRS. There is a warrant out for your arrest for unpaid back taxes of 6,400 dollars.\nYou: That can't be right, I have an accountant.\nCaller: Ma'am, local police will be at your door within the hour unless this is resolved immediately.\nYou: Oh my god. What do I do?\nCaller: Go to the nearest store and buy Google Play gift cards in the amount owed. Stay on the line with me the whole time.\nCaller: Do not tell the cashier what the cards are for, and do not hang up or the warrant goes active."
+    },
+    {
+      "id": "fresh_scam_11_pharmacy_discount_card",
+      "label": "scam",
+      "type": "fake pharmacy savings plan collecting card details",
+      "hard": true,
+      "text": "Caller: Hi, this is Lisa with the Senior Prescription Savings Program. Because you're on blood pressure medicine you qualify for our discount plan.\nYou: My pills are expensive, that would help.\nCaller: Members save up to 80 percent at any pharmacy. Your first month is only 19.95 to activate.\nYou: I'd have to ask my son.\nCaller: The enrollment window closes today at five, after that the price goes back up for the rest of the year.\nYou: Well, okay I guess.\nCaller: Great, just read me the long number on the front of your debit card and the three numbers on the back."
+    },
+    {
+      "id": "fresh_scam_12_ssa_suspended_number",
+      "label": "scam",
+      "type": "fake Social Security suspension",
+      "hard": false,
+      "text": "Caller: This is a call from the Social Security Administration. Your social security number has been suspended due to suspicious activity in Texas.\nYou: Suspended? I live in Ohio.\nCaller: Someone used your number for drug trafficking. To avoid legal action, I need to verify your social security number.\nYou: I don't know about this.\nCaller: If you don't cooperate right now, your benefits will be frozen and a warrant will be issued.\nYou: Okay, it's 2 9 1...\nCaller: Go on, and then we'll move your money to a protected federal account."
+    },
+    {
+      "id": "fresh_scam_13_romance_customs_fee",
+      "label": "scam",
+      "type": "online romance contact needs money for a customs fee",
+      "hard": false,
+      "text": "Caller: My darling Margaret, it's Richard. I finally finished the job on the oil rig and I'm coming to see you.\nYou: Oh Richard, I've waited so long to meet you.\nCaller: There's a problem. Customs is holding my equipment and my pay until I clear a fee of 4,000 dollars.\nYou: Can't your company pay it?\nCaller: They won't until I'm back. You're the only one I trust. Please send it by Western Union to my agent here.\nCaller: And please don't tell your daughter, she never understood us. I'll pay you back the moment I land."
+    },
+    {
+      "id": "fresh_scam_14_utility_shutoff_threat",
+      "label": "scam",
+      "type": "fake utility disconnection demanding immediate payment",
+      "hard": false,
+      "text": "Caller: This is the disconnection department at Riverbend Power. Our records show your account is past due 412 dollars.\nYou: I paid my bill last week.\nCaller: That payment did not go through. A technician is on the way to shut off your power in 45 minutes.\nYou: Please don't, I have my oxygen machine.\nCaller: Then you need to pay right now. We accept a payment through Zelle or a Bitcoin machine at the gas station.\nYou: I've never used those.\nCaller: I'll walk you through it. Don't hang up or your service gets cut automatically."
+    },
+    {
+      "id": "fresh_scam_15_cashiers_check_jury_duty",
+      "label": "scam",
+      "type": "fake missed jury duty fine paid by cashier's check and courier",
+      "hard": true,
+      "text": "Caller: This is Lieutenant Ross with the county sheriff's office. You failed to appear for jury duty on the 3rd, and a judge has signed a bench order.\nYou: Jury duty? I never got anything in the mail.\nCaller: The notice was sent certified. You can settle it today with a bond of 1,850 and the order gets withdrawn.\nYou: Can I come down to the courthouse?\nCaller: If you come in you'll be taken into custody, ma'am. Better to resolve it from home.\nCaller: Get a cashier's check made out to the name I give you, put it in an envelope, and a deputy will collect it at your door at three o'clock."
+    },
+    {
+      "id": "fresh_normal_01_real_bank_fraud_alert",
+      "label": "normal",
+      "type": "real bank fraud alert that says it will never ask for codes",
+      "hard": true,
+      "text": "Caller: Hello, this is an automated fraud alert from Lakeshore Federal about a charge on your debit card ending in 4471.\nCaller: Did you make a purchase of 86 dollars at Harvest Grocery today? Press 1 for yes or 2 for no.\nYou: Yes, that was me, I bought groceries.\nCaller: Thank you. That transaction is confirmed and your card is ready to use.\nCaller: Remember, we will never call and ask for your PIN, your password, or a verification code.\nCaller: If you have questions, call the number on the back of your card. Goodbye."
+    },
+    {
+      "id": "fresh_normal_02_user_calls_bank_reads_code",
+      "label": "normal",
+      "type": "person called their own bank and reads back a code they requested",
+      "hard": true,
+      "text": "You: Hi, I called because I'm locked out of my online banking.\nCaller: I'm sorry about that, I can help. Since you called our main number, I'll send a one-time code to the phone on file so we can confirm it's you.\nYou: Okay, I just got a text.\nCaller: Go ahead and read that to me, it's only good for the next ten minutes.\nYou: It's 5 5 2 0 1 8.\nCaller: Thank you, you're verified. I've reset your login, you can set a new password on the website.\nYou: Wonderful, thank you so much."
+    },
+    {
+      "id": "fresh_normal_03_grandkid_small_money_no_pressure",
+      "label": "normal",
+      "type": "grandchild asking for a small amount for an ordinary reason, no pressure",
+      "hard": true,
+      "text": "Caller: Hi Grandpa, it's Sam. How's your hip doing?\nYou: Getting better every day. How's school?\nCaller: It's good. Hey, my soccer team is going to the tournament in Erie and the trip is 40 dollars. Mom said I could ask if you wanted to help.\nYou: Of course, I'll put a check in a card for you.\nCaller: Thanks Grandpa, no rush at all. Mom can pick it up Sunday when we come for dinner.\nYou: Tell your mom to bring that apple pie.\nCaller: I will. Love you, bye."
+    },
+    {
+      "id": "fresh_normal_04_surprise_party_dont_tell",
+      "label": "normal",
+      "type": "family planning a surprise party, 'don't tell Grandpa'",
+      "hard": true,
+      "text": "Caller: Hi Mom, it's Rachel. Is Dad near you right now?\nYou: No, he's out in the garden. Why?\nCaller: Okay good. We're throwing him a surprise party for his 80th next Saturday. Don't tell him, keep this between us.\nYou: Oh how fun. He'll be so surprised.\nCaller: Can you get him to the church hall by two o'clock? Say it's for the bake sale.\nYou: I can do that. Should I bring anything?\nCaller: Just bring yourself and maybe those deviled eggs. Talk soon."
+    },
+    {
+      "id": "fresh_normal_05_urgent_doctor_office",
+      "label": "normal",
+      "type": "urgent but real doctor's office call about lab results",
+      "hard": true,
+      "text": "Caller: Hello, this is Megan, a nurse at Dr. Patel's office. Is this Harold?\nYou: Yes, this is Harold.\nCaller: Your blood work came back and your potassium is quite high. Dr. Patel wants you to stop the new water pill right away.\nYou: Oh, should I be worried?\nCaller: She'd like you to come in tomorrow morning for a recheck. If you feel chest pain or weakness today, please go to the emergency room immediately.\nYou: Okay. Do I need to bring anything?\nCaller: Just your medication bottles. We'll see you at 9:30."
+    },
+    {
+      "id": "fresh_normal_06_utility_scheduled_maintenance",
+      "label": "normal",
+      "type": "utility announcing scheduled maintenance, no payment request",
+      "hard": true,
+      "text": "Caller: Hello, this is a courtesy call from Riverbend Power.\nCaller: We will be doing scheduled line maintenance on your street this Thursday between 9 a.m. and 1 p.m.\nCaller: Your power will be off for about two hours during that time.\nYou: Oh, thank you for letting me know.\nCaller: If you use medical equipment that needs electricity, please call the number on your monthly bill to be placed on our priority list.\nCaller: There is nothing you need to pay and no action is required. Thank you."
+    },
+    {
+      "id": "fresh_normal_07_police_fundraiser_by_mail",
+      "label": "normal",
+      "type": "real police association fundraiser that offers to mail info",
+      "hard": true,
+      "text": "Caller: Good evening, I'm calling on behalf of the Maple Township Police Athletic League. We run summer camps for local kids.\nYou: Oh, that's nice. I'm not sure I can give much.\nCaller: That's completely fine. We're not asking for anything over the phone.\nCaller: Would you like us to mail you a brochure and a pledge card? You can look it over and decide later.\nYou: Sure, you can mail it.\nCaller: Great, we have your address from the township directory. Thank you, and have a good night."
+    },
+    {
+      "id": "fresh_normal_08_charity_mail_form",
+      "label": "normal",
+      "type": "charity asking permission to mail a form",
+      "hard": true,
+      "text": "Caller: Hi, this is Paula from the Valley Food Pantry. You donated canned goods to our drive last fall and we wanted to say thank you.\nYou: You're welcome, I was glad to help.\nCaller: We're doing our holiday drive in November. Could we mail you a donation form?\nYou: Yes, that's fine.\nCaller: Wonderful. There's no pressure at all, give whatever you're comfortable with, or just bring cans by the church.\nYou: I'll probably bring cans again.\nCaller: That would be perfect. Thanks so much."
+    },
+    {
+      "id": "fresh_normal_09_pharmacy_refill_ready",
+      "label": "normal",
+      "type": "pharmacy calling that a prescription is ready",
+      "hard": false,
+      "text": "Caller: Hi, this is Brookside Pharmacy calling for Dorothy.\nYou: This is Dorothy.\nCaller: Your refill for the metformin is ready for pickup. Your copay is 12 dollars.\nYou: Oh good, I was almost out.\nCaller: We're open until 8 tonight. Bring your insurance card if it changed this year.\nYou: It's the same. I'll come by after lunch.\nCaller: Sounds good, see you then."
+    },
+    {
+      "id": "fresh_normal_10_daughter_checking_in",
+      "label": "normal",
+      "type": "adult child checking in",
+      "hard": false,
+      "text": "Caller: Hi Dad, just calling to see how you're doing.\nYou: Oh I'm fine. Watched the ball game last night.\nCaller: Did they win?\nYou: Lost in the ninth. Terrible.\nCaller: Ha, figures. Did you take your pills this morning?\nYou: Yes, I took them with breakfast.\nCaller: Good. I'll pick you up Wednesday for your eye appointment, around ten.\nYou: Okay, see you then sweetheart."
+    },
+    {
+      "id": "fresh_normal_11_dentist_reminder",
+      "label": "normal",
+      "type": "dentist appointment reminder",
+      "hard": false,
+      "text": "Caller: Hi, this is Amy from Hillcrest Dental reminding you of your cleaning appointment tomorrow at 2:15.\nYou: Oh, thank you, I almost forgot.\nCaller: Will you be able to make it?\nYou: Yes, my neighbor is driving me.\nCaller: Great. If anything changes, just give us a call.\nYou: I will. Bye now."
+    },
+    {
+      "id": "fresh_normal_12_insurance_agent_renewal",
+      "label": "normal",
+      "type": "known insurance agent discussing a renewal, tells her to check paperwork",
+      "hard": true,
+      "text": "Caller: Hi Betty, it's Tom Grady from the Grady Insurance office on Main Street.\nYou: Hi Tom, how are you?\nCaller: Doing well. Your homeowners policy renews next month and the premium went up about 60 dollars a year.\nYou: Oh, everything's going up.\nCaller: I know. I'm going to mail you the renewal papers. Don't send anything until you've read them, and call me if you want to shop around.\nYou: Can my son look at it too?\nCaller: Absolutely, have him call me anytime. Take care, Betty."
+    },
+    {
+      "id": "fresh_normal_13_friend_lunch_plans",
+      "label": "normal",
+      "type": "friend making lunch plans",
+      "hard": false,
+      "text": "Caller: Hello Ruth, it's Evelyn. Are we still on for lunch Friday?\nYou: Yes, I've been looking forward to it.\nCaller: How about the diner on 5th Street, around noon?\nYou: Perfect. Is Gladys coming?\nCaller: She said she would if her daughter can drive her.\nYou: Wonderful. See you Friday.\nCaller: Bye dear."
+    },
+    {
+      "id": "fresh_normal_14_grandson_new_number",
+      "label": "normal",
+      "type": "grandson with new phone, suggests verifying, no money",
+      "hard": true,
+      "text": "Caller: Hi Grandma, it's Eli. I got a new phone so this is my new number.\nYou: Eli? It doesn't show your name.\nCaller: Yeah, I switched carriers. You can call Mom to double check if you want, I know you worry about those scam calls.\nYou: Good boy. What's the name of our old dog?\nCaller: Biscuit. He used to steal my socks.\nYou: That's right. I'll save the number.\nCaller: Thanks. I'll see you at Thanksgiving."
+    },
+    {
+      "id": "fresh_normal_15_contractor_deposit_known",
+      "label": "normal",
+      "type": "contractor she hired confirming schedule and deposit she already agreed to",
+      "hard": true,
+      "text": "Caller: Hi Mrs. Owens, it's Luis from Owens Creek Roofing. Sorry, no relation, just the same name.\nYou: Ha, yes Luis, you came out to look at my roof last week.\nCaller: That's right. We can start Monday morning if the weather holds.\nYou: That's fine. Do you need the deposit?\nCaller: Like we agreed on the contract, 500 dollars by check when the crew arrives. No rush before then.\nYou: I'll have the check ready Monday.\nCaller: Great, see you then."
+    }
+  ]
+}

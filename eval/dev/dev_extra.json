@@ -1,0 +1,145 @@
+{
+ "_about": "Extra dev data: the 20 earlier prep transcripts (eval/extra/transcripts), monologue style. Never used as a test set.",
+ "items": [
+  {
+   "id": "devx_normal_01_real_bank_fraud_alert",
+   "label": "normal",
+   "type": "real bank fraud alert",
+   "hard": false,
+   "text": "Caller: Hello, this is an automated message from your bank. We noticed a purchase of forty-two dollars at a grocery store that looks unusual. If you made this purchase, no action is needed. If you did not, please call the number on the back of your card. Remember, we will never ask you for your PIN, password, or a verification code over the phone. Thank you and have a good day."
+  },
+  {
+   "id": "devx_normal_02_grandkid_borrow_twenty",
+   "label": "normal",
+   "type": "grandkid borrow twenty",
+   "hard": false,
+   "text": "Caller: Hi Grandma, it's Emma. I'm at the school book fair and I forgot my wallet at home. Could I borrow twenty dollars? Mom said it's fine, she's right here, and I'll pay you back when I come over on Saturday. Actually, can Mom just bring it over tonight? Okay, thanks Grandma, love you. Say hi to Grandpa for me."
+  },
+  {
+   "id": "devx_normal_03_pharmacy_ready",
+   "label": "normal",
+   "type": "pharmacy ready",
+   "hard": false,
+   "text": "Caller: Hello, this is the pharmacy at Main Street calling for Robert. Your prescription for blood pressure medication is ready for pickup. We're open until nine tonight and ten to six on the weekend. If you have any questions about your medication, you can ask the pharmacist when you come in. Have a great day."
+  },
+  {
+   "id": "devx_normal_04_doctor_appointment",
+   "label": "normal",
+   "type": "doctor appointment",
+   "hard": false,
+   "text": "Caller: Hi, this is Linda from Doctor Patel's office calling to confirm your appointment on Thursday at two thirty. Please bring your insurance card and a list of your current medications. If you need to reschedule, call us back at the office number. Please arrive fifteen minutes early to fill out some paperwork. Thank you."
+  },
+  {
+   "id": "devx_normal_05_friend_exciting_news",
+   "label": "normal",
+   "type": "friend exciting news",
+   "hard": false,
+   "text": "Caller: Margaret! It's Joan. Call me back right now, I have the most exciting news! My daughter is having twins! I couldn't wait to tell you. I'm so happy I can barely sit still. Oh and are we still on for bridge on Tuesday? Bring that lemon cake if you can. Call me back as soon as you get this!"
+  },
+  {
+   "id": "devx_normal_06_gift_card_birthday",
+   "label": "normal",
+   "type": "gift card birthday",
+   "hard": false,
+   "text": "Caller: Hi Dad, it's Michael. Just wanted to let you know I mailed a birthday card for Jake, and I put a gift card in there for the bookstore since he loves reading. Should get there by Friday. How are you feeling? Did the knee get better? Let's do dinner this weekend, I can pick you up around six."
+  },
+  {
+   "id": "devx_normal_07_grandson_college_update",
+   "label": "normal",
+   "type": "grandson college update",
+   "hard": false,
+   "text": "Caller: Hey Grandpa, it's me, Tyler. I just wanted to tell you I passed my chemistry exam! I studied so hard. Thanks for the advice about making flash cards, it really worked. I'm coming home for Thanksgiving, Mom already bought the tickets. Can we go fishing again? Okay, I have class in ten minutes, talk soon. Love you."
+  },
+  {
+   "id": "devx_normal_08_bank_branch_appointment",
+   "label": "normal",
+   "type": "bank branch appointment",
+   "hard": false,
+   "text": "Caller: Good morning, this is Sarah from your local bank branch. I'm calling to remind you about your appointment with our financial advisor on Monday at ten AM to review your retirement account. Please bring a photo ID. If you'd like to reschedule, you can visit us in person or call the branch directly. We look forward to seeing you."
+  },
+  {
+   "id": "devx_normal_09_police_community_event",
+   "label": "normal",
+   "type": "police community event",
+   "hard": false,
+   "text": "Caller: Hello, this is Officer Martinez with the town police department. We're calling residents about our free senior safety workshop next Wednesday at the community center. We'll talk about how to spot scams and keep your home safe. Coffee and snacks will be provided. No registration is needed, just come by. Have a good afternoon."
+  },
+  {
+   "id": "devx_normal_10_daughter_check_in",
+   "label": "normal",
+   "type": "daughter check in",
+   "hard": false,
+   "text": "Caller: Hi Mom, it's Lisa. Just checking in. Did you remember to take your pills this morning? The kids want to video call you tonight after dinner, maybe around seven? Also I ordered your groceries online, they should be delivered tomorrow between noon and two. Don't worry about paying, I already took care of it. Love you, talk tonight."
+  },
+  {
+   "id": "devx_scam_01_grandson_jail",
+   "label": "scam",
+   "type": "grandson jail",
+   "hard": false,
+   "text": "Caller: Hi Grandpa, it's me, your favorite grandson. I'm in a lot of trouble. I got pulled over and they found something in the car that wasn't mine, and now I'm at the police station. I need fifteen hundred dollars for bail right now or I have to stay overnight. Please don't tell Mom, she'll kill me. The officer says you can send it through Western Union. Can you go today? Please, Grandpa, I'm scared."
+  },
+  {
+   "id": "devx_scam_02_bank_verification_code",
+   "label": "scam",
+   "type": "bank verification code",
+   "hard": false,
+   "text": "Caller: Hello, this is Mark from the fraud department at your bank. We've detected a suspicious charge of nine hundred dollars on your account at an electronics store in Florida. To stop the charge and secure your account, I'm going to send you a verification code by text. When you get it, read me the code so I can confirm your identity. Please don't hang up, this needs to be done immediately before the transaction goes through."
+  },
+  {
+   "id": "devx_scam_03_irs_warrant",
+   "label": "scam",
+   "type": "irs warrant",
+   "hard": false,
+   "text": "Caller: This is Officer Daniel Reed with the Internal Revenue Service. Our records show you owe back taxes of four thousand two hundred dollars. A warrant has been issued for your arrest and local police will be at your home within the hour unless this is resolved today. You can settle the balance right now with Apple gift cards. Do not discuss this with anyone, including family members, as that may be considered obstruction."
+  },
+  {
+   "id": "devx_scam_04_tech_support",
+   "label": "scam",
+   "type": "tech support",
+   "hard": false,
+   "text": "Caller: Hi, I'm calling from the Microsoft security team. Your computer has been sending us error messages and it's infected with a virus that is stealing your banking information. I need you to go to your computer right now and download a program so I can fix it remotely. There is a one-time support fee of three hundred dollars. You can pay by reading me your card number and the code on the back. Please stay on the line with me."
+  },
+  {
+   "id": "devx_scam_05_social_security_suspended",
+   "label": "scam",
+   "type": "social security suspended",
+   "hard": false,
+   "text": "Caller: This is an urgent message from the Social Security Administration. Your Social Security number has been suspended due to suspicious activity in Texas. To avoid legal action and the freezing of your bank accounts, you must verify your identity immediately. Please confirm your full Social Security number and date of birth. If you hang up, a case will be filed against you today."
+  },
+  {
+   "id": "devx_scam_06_crypto_romance",
+   "label": "scam",
+   "type": "crypto romance",
+   "hard": false,
+   "text": "Caller: My darling, I miss you so much. I know we've only talked online but I feel so close to you. I have an amazing opportunity. My uncle showed me a Bitcoin investment that doubles every week. If you send me five thousand dollars in Bitcoin, I will invest it for both of us and we can finally meet. But please keep this between us, your children would not understand our love. The window closes tonight."
+  },
+  {
+   "id": "devx_scam_07_prize_fee",
+   "label": "scam",
+   "type": "prize fee",
+   "hard": false,
+   "text": "Caller: Congratulations! You have been selected as the winner of our national sweepstakes, a brand new car and two hundred and fifty thousand dollars. To release your prize, we just need you to cover the processing and tax fee of nine hundred ninety-nine dollars. You can pay with Google Play cards from any pharmacy. You must claim within the hour or the prize goes to the next winner. Don't tell anyone until it's delivered."
+  },
+  {
+   "id": "devx_scam_08_utility_shutoff",
+   "label": "scam",
+   "type": "utility shutoff",
+   "hard": false,
+   "text": "Caller: Hello, this is the electric company billing department. Our records show your account is past due by three hundred eighty dollars. A technician is on the way to disconnect your power within the next forty-five minutes. To stop the shutoff, you need to make a payment immediately. We accept payment by prepaid card or Zelle. Please stay on the line while you get the card and read me the numbers."
+  },
+  {
+   "id": "devx_scam_09_fake_police_niece",
+   "label": "scam",
+   "type": "fake police niece",
+   "hard": false,
+   "text": "Caller: Ma'am, this is Sergeant Collins with the county police. Your niece was in a car accident and she caused injuries to a pregnant woman. She's been arrested. I'm putting her public defender on the line. He needs eight thousand dollars for her bond today. A courier will come to your house to pick up the cash. There's a gag order on this case, so you cannot tell anyone in the family, or she could face more charges."
+  },
+  {
+   "id": "devx_scam_10_wire_family_emergency",
+   "label": "scam",
+   "type": "wire family emergency",
+   "hard": false,
+   "text": "Caller: Grandma, it's me. I'm traveling in Mexico and I lost my wallet and passport. I'm stuck at the airport and they won't let me leave. I need you to wire me two thousand dollars right now so I can get a new passport. Please hurry, my phone is almost dead. And please don't tell Dad, I wasn't supposed to be here. I'll pay you back as soon as I get home, I promise."
+  }
+ ]
+}
