@@ -194,6 +194,18 @@ The two `short_*` calls were made Sunday with Piper (`tools/make_piper_calls.py`
 
 **`eval/`: held-out eval set.** 10 scam + 10 normal transcripts in `eval/eval_set.json`, also split into `eval/transcripts/*.txt` plus `eval/labels.csv`. Six normals are hard negatives (bank, police, small family money ask, user-initiated code). **Never use these as few-shot examples or for tuning keywords.** Few-shot examples come from the demo scripts or new text.
 
+**Eval results (Sun Oct 11, `python eval/run_eval.py`, `llama3.2:3b`, untuned; full detail in `eval/results.json`).** Each transcript is fed line by line like a live call; "caught" means it reached the red alert.
+
+| | Accuracy | Scams caught | False alarms | Hard negatives flagged |
+|---|---|---|---|---|
+| Rules only | 70% | 4/10 | 0/10 | 0/6 |
+| LLM only | 90% | 9/10 | 1/10 | 1/6 |
+| **Fused (the app)** | **90%** | **9/10** | **1/10** | **1/6** |
+
+- Missed: `scam_02_medicare_ssn`. The rules scored it 64, so the app still showed a yellow "Be careful". The LLM rated it 16.
+- False alarm: `normal_09_verification_code_self` (library help desk says "type the code in yourself, don't read it to me"). Rules 0, LLM misread it.
+- LLM averaged 3.2 s per answer during the eval (laptop was low on RAM).
+
 **Older prep (archived, not the official set):**
 - `eval/extra/transcripts/`: an earlier set of 10 scam + 10 normal monologue-style transcripts, unlabeled. Keep it out of `run_eval.py` by default. It can serve as a secondary check or as a source of few-shot text, since it isn't part of the held-out set.
 - `samples/piper_old/`: earlier Piper-generated calls (`grandson_bail.wav`, `normal_family_dinner.wav`) and their script. Superseded by the Kokoro calls above.
