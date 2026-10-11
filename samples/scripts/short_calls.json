@@ -1,0 +1,34 @@
+{
+  "_about": "Short calls for the 90 s demo video (~20 s normal, ~30 s scam). Generated offline with Piper by tools/make_piper_calls.py. Same format as calls.json, but voices are Piper model files in voices/. Numbers are spelled out so the TTS reads them cleanly.",
+  "calls": [
+    {
+      "id": "short_normal_checkin",
+      "label": "normal",
+      "title": "Short: real grandson says 'it's me' but asks for nothing. Must stay green",
+      "voices": {"caller": "en_US-ryan-medium", "you": "en_US-lessac-medium"},
+      "lines": [
+        ["caller", "Hi Grandma, it's me, Ethan!"],
+        ["you", "Ethan! What a nice surprise, sweetheart."],
+        ["caller", "I just wanted to tell you I'm coming home for Thanksgiving. Can I bring my roommate?"],
+        ["you", "Of course you can. I'll bake two pies."],
+        ["caller", "You're the best. Love you, Grandma. See you soon!"]
+      ]
+    },
+    {
+      "id": "short_scam_bail",
+      "label": "scam",
+      "title": "Short: fake grandson, arrest, bail, secrecy, gift cards. Red by line 2",
+      "alert_line": 2,
+      "voices": {"caller": "en_US-ryan-medium", "you": "en_US-lessac-medium"},
+      "lines": [
+        ["caller", "Grandma, it's me. I'm in big trouble."],
+        ["you", "Ethan? You sound different."],
+        ["caller", "I have a cold. I was in a car accident, and the police arrested me. I need bail money right now."],
+        ["you", "Oh no! Should I call your mother?"],
+        ["caller", "No, please don't tell Mom. Keep this between us. Buy Google Play gift cards, two thousand dollars, and read me the numbers."],
+        ["you", "Gift cards? That seems strange."],
+        ["caller", "Please hurry, Grandma. And don't hang up."]
+      ]
+    }
+  ]
+}
