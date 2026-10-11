@@ -31,14 +31,15 @@ Mic or recording ─► Whisper (speech-to-text, on device)
 
 ## Results
 
-On 20 held-out calls (10 scam, 10 normal, 6 of the normals deliberately tricky), with nothing tuned on them:
+Scored on test calls we **never tuned on**, including a fresh blind set written by an agent that never saw the code or prompts:
 
-| | Scams caught | False alarms |
+| | Fresh blind set (30 calls) | Held-out set (20 calls) |
 |---|---|---|
-| Keyword rules alone | 4 / 10 | 0 / 10 |
-| **Scam Shield (rules + on-device AI)** | **9 / 10** | **1 / 10** |
+| Keyword rules alone (baseline) | 4/15 scams caught · 0 false alarms | 4/10 · 0 |
+| Improved rules (parallel agent round) | 9/15 · 0 | 7/10 · 0 |
+| **Scam Shield (rules + on-device AI)** | **13/15 · 1** | **10/10 · 0** |
 
-The local AI is what catches the scams that don't use obvious keywords. Run `python eval/run_eval.py` to reproduce.
+How we got there, round by round (including five agents working in parallel), is in [IMPROVEMENTS.md](IMPROVEMENTS.md). Reproduce with `python eval/run_eval.py --whole --data eval/fresh/fresh_set.json`.
 
 ## Run it
 
