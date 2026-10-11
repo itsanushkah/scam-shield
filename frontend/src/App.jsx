@@ -6,6 +6,7 @@ import ControlPanel from './ControlPanel.jsx'
 import PhoneFrame from './PhoneFrame.jsx'
 import RiskMeter from './RiskMeter.jsx'
 import Transcript from './Transcript.jsx'
+import VerifyCard from './VerifyCard.jsx'
 import { useCallSocket } from './useCallSocket.js'
 
 export default function App() {
@@ -36,9 +37,11 @@ export default function App() {
 
         <RiskMeter score={call.score} live={live} />
 
+        {call.score?.verify && <VerifyCard verify={call.score.verify} />}
+
         <Transcript lines={call.transcript} live={live} />
 
-        <CallControls onEnd={call.stop} disabled={!live} />
+        <CallControls onEnd={call.stop} disabled={!live} compact={call.score?.level === 'red'} />
 
         {showAlert && (
           <AlertBanner
@@ -47,6 +50,7 @@ export default function App() {
             alert={{
               reason: call.score?.reason || call.alert.reason,
               suggested_action: call.score?.suggested_action || call.alert.suggested_action,
+              verify: call.score?.verify,
             }}
             onHangUp={() => {
               call.stop()
@@ -138,14 +142,15 @@ function useCallTimer(running) {
   return seconds
 }
 
-function CallControls({ onEnd, disabled }) {
+// Smaller while red, so the reasons, the check card and the transcript all fit.
+function CallControls({ onEnd, disabled, compact }) {
   return (
-    <footer className="flex justify-center py-6">
+    <footer className={`flex justify-center ${compact ? 'py-3' : 'py-6'}`}>
       <button
         type="button"
         onClick={onEnd}
         disabled={disabled}
-        className="flex h-20 w-20 items-center justify-center rounded-full bg-red-600 text-white shadow-lg hover:bg-red-500 disabled:opacity-40"
+        className={`flex ${compact ? 'h-16 w-16' : 'h-20 w-20'} items-center justify-center rounded-full bg-red-600 text-white shadow-lg hover:bg-red-500 disabled:opacity-40`}
         aria-label="End call"
       >
         <svg viewBox="0 0 24 24" className="h-9 w-9 rotate-[135deg] fill-current" aria-hidden="true">

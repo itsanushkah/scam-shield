@@ -73,6 +73,21 @@ export default function CallSummary({ summary, onClose }) {
             </Section>
           )}
 
+          {summary.verify && (
+            <Section title={`Check it's really ${summary.verify.name ?? 'them'}`}>
+              <ul className="space-y-1.5">
+                {summary.verify.steps.map((step) => (
+                  <li key={step} className="flex gap-2 text-lg">
+                    <span className="text-sky-300" aria-hidden="true">
+                      ✓
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
           {summary.suggested_action && (
             <Section title="What to do now">
               <p className="rounded-2xl bg-white px-4 py-3 text-xl font-bold leading-snug text-slate-900">

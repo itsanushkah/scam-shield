@@ -26,6 +26,12 @@ export default function AlertBanner({ alert, onHangUp, onDismiss }) {
         )}
 
         {alert.reason && <p className="mt-4 text-xl leading-snug text-red-50">{alert.reason}</p>}
+
+        {alert.verify && (
+          <p className="mt-4 rounded-2xl bg-sky-100 px-4 py-3 text-xl font-bold leading-snug text-slate-900">
+            Is it really {alert.verify.name ?? 'them'}? {alert.verify.steps[0]}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-col gap-3">
