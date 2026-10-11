@@ -5,15 +5,19 @@ where the last emitted word ended, so words in the overlap are only emitted
 once. Words touching the end of a chunk may be cut off mid-word, so they are
 left for the next chunk, which hears them whole.
 
-base.en is used rather than small.en: on 3 s chunks it was as accurate
-(5.1% vs 5.6% WER on the hero call) and ~4x faster (0.46 s vs 1.74 s per chunk,
-with small.en spiking to 7 s).
+Each decode hears the last CONTEXT_S seconds, not just the 3 s chunk: more
+context means fewer dropped or misheard words (4.2% -> 3.2% WER across the 7
+demo calls) for ~0.15 s more per chunk.
+
+base.en is used rather than small.en: on short windows it was as accurate and
+several times faster (small.en couldn't keep up with real time on this CPU).
 """
 
 import numpy as np
 from faster_whisper import WhisperModel
 
 MODEL_NAME = "base.en"
+CONTEXT_S = 6.0  # seconds of audio each decode hears
 SILENCE_RMS = 0.003  # chunks quieter than this are skipped (Whisper invents text on silence)
 EDGE_S = 0.15  # words ending this close to a chunk's end wait for the next chunk
 SLACK_S = 0.05  # timestamp jitter allowed when comparing against the last word
@@ -37,18 +41,25 @@ class Transcriber:
     def __init__(self):
         self.cursor = 0.0  # call time where the last emitted word ended
         self.tail = []  # last few emitted words, normalized, for catching repeats
+        self.audio = np.zeros(0, dtype=np.float32)  # the last CONTEXT_S seconds heard
+        self.audio_end = 0.0  # call time at the end of self.audio
 
     def feed(self, chunk: np.ndarray, t_start: float, t_end: float, is_last: bool) -> list[dict]:
         """Return the new words in this chunk as [{"word", "start", "end"}] in call time."""
+        self._remember(chunk, t_start, t_end)
         if np.sqrt(np.mean(chunk**2)) < SILENCE_RMS:
             return []
 
+        # Decode the last CONTEXT_S seconds, but only words after the cursor are new.
+        window = self.audio
+        t_start = t_end - len(window) / 16000
+
         segments, _ = load_model().transcribe(
-            chunk,
+            window,
             language="en",
             beam_size=1,
             temperature=0.0,  # no retries at higher temperatures: those caused 13 s spikes
-            max_new_tokens=64,  # a 3 s chunk is ~15 words; stops runaway repetition
+            max_new_tokens=96,  # a 6 s window is ~30 words; stops runaway repetition
             vad_filter=True,
             word_timestamps=True,
             condition_on_previous_text=False,
@@ -72,6 +83,12 @@ class Transcriber:
             self.cursor = words[-1]["end"]
             self.tail = (self.tail + [_norm(w["word"]) for w in words])[-REPEAT_WORDS:]
         return words
+
+    def _remember(self, chunk: np.ndarray, t_start: float, t_end: float):
+        """Append the part of this chunk not heard before, keeping only the last CONTEXT_S."""
+        new = chunk[max(0, round((self.audio_end - t_start) * 16000)) :]
+        self.audio = np.concatenate([self.audio, new])[-int(CONTEXT_S * 16000) :]
+        self.audio_end = t_end
 
     def _drop_repeat(self, words: list[dict]) -> list[dict]:
         """Timestamps are loose at chunk edges, so the start of a chunk can repeat the
