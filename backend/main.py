@@ -12,6 +12,7 @@ import httpx
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 import audio
+import fusion
 import llm
 import rules
 import stt
@@ -97,7 +98,7 @@ async def _run_demo(ws: WebSocket, samples):
     transcriber = stt.Transcriber()
     duration = len(samples) / audio.SAMPLE_RATE
     heard = []  # every word so far, with call-time stamps
-    latest = {"rules": None, "llm": None}
+    scores = fusion.Fusion()
     llm_task = None
 
     try:
@@ -112,12 +113,11 @@ async def _run_demo(ws: WebSocket, samples):
 
             heard.extend(words)
             recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
-            latest["rules"] = rules.score(recent)
-            await ws.send_json(_score_event(latest))
+            await _send_score(ws, *scores.update(rules=rules.score(recent)))
 
             # One LLM call at a time. If it's still busy, skip this chunk rather than queue it.
             if llm_task is None or llm_task.done():
-                llm_task = asyncio.create_task(_ask_llm(ws, recent, latest))
+                llm_task = asyncio.create_task(_ask_llm(ws, recent, scores))
 
         if llm_task:
             await llm_task  # let the last answer land before the call ends
@@ -127,37 +127,20 @@ async def _run_demo(ws: WebSocket, samples):
     await ws.send_json({"type": "status", "state": "ended"})
 
 
-async def _ask_llm(ws: WebSocket, transcript: str, latest: dict):
+async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion):
     try:
-        latest["llm"] = await llm.score(transcript, ws.app.state.ollama)
+        result = await llm.score(transcript, ws.app.state.ollama)
     except (httpx.HTTPError, ValueError):
         # Ollama down or a bad answer: keep going on rules alone.
         await ws.send_json({"type": "status", "llm": "down"})
         return
-    await ws.send_json(_score_event(latest))
+    await _send_score(ws, *scores.update(llm=result))
 
 
-def _score_event(latest: dict) -> dict:
-    """Merge rules and LLM: the higher risk wins, and its reason is the one shown.
-    Smoothing and the red latch come with fusion in a later part."""
-    results = [r for r in (latest["rules"], latest["llm"]) if r]
-    top = max(results, key=lambda r: r["risk"])
-    signals = sorted({s for r in results for s in r["signals"]})
-    return {
-        "type": "score",
-        "risk": top["risk"],
-        "level": _level(top["risk"]),
-        "signals": signals,
-        "reason": top["reason"],
-        "suggested_action": top["suggested_action"],
-        "rules_risk": latest["rules"]["risk"] if latest["rules"] else None,
-        "llm_risk": latest["llm"]["risk"] if latest["llm"] else None,
-    }
-
-
-def _level(risk: int) -> str:
-    # Thresholds from CLAUDE.md. Fusion (smoothing + latch) replaces this in a later part.
-    return "red" if risk > 70 else "yellow" if risk >= 40 else "green"
+async def _send_score(ws: WebSocket, event: dict, alert: dict | None):
+    await ws.send_json(event)
+    if alert:
+        await ws.send_json(alert)
 
 
 async def _cancel(task):
