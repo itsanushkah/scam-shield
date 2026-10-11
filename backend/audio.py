@@ -60,3 +60,30 @@ async def stream_chunks(audio: np.ndarray, chunk_s: float = CHUNK_S, overlap_s: 
         if end == len(audio):
             break
         start += step
+
+
+async def live_chunks(queue: "asyncio.Queue[bytes | None]", chunk_s: float = CHUNK_S, overlap_s: float = OVERLAP_S):
+    """Like stream_chunks, but for audio arriving live as PCM16 frames on a queue.
+
+    Yields each window as soon as enough audio has arrived. A None on the queue
+    means the caller stopped; whatever is left is yielded as a final chunk.
+    """
+    chunk = int(chunk_s * SAMPLE_RATE)
+    step = int((chunk_s - overlap_s) * SAMPLE_RATE)
+    buf = np.zeros(0, dtype=np.float32)
+    offset = 0  # call-time sample index of buf[0]
+
+    while True:
+        frame = await queue.get()
+        if frame is None:
+            if len(buf):
+                yield offset / SAMPLE_RATE, (offset + len(buf)) / SAMPLE_RATE, buf
+            return
+
+        pcm = np.frombuffer(frame[: len(frame) // 2 * 2], dtype=np.int16)
+        buf = np.concatenate([buf, pcm.astype(np.float32) / 32768.0])
+
+        while len(buf) >= chunk:
+            yield offset / SAMPLE_RATE, (offset + chunk) / SAMPLE_RATE, buf[:chunk]
+            buf = buf[step:]
+            offset += step
