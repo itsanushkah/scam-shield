@@ -1,0 +1,5 @@
+Caller: Hello, this is the front desk at Doctor Patel's office, calling to confirm your appointment tomorrow at ten thirty.
+You: Yes, I'll be there.
+Caller: Great. Please bring your insurance card and a list of your current medications.
+You: Will do. Do I need to fast?
+Caller: No, not for this visit. We'll see you tomorrow.

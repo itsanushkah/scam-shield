@@ -1,0 +1,21 @@
+id,label,type,hard
+scam_01_tech_support,scam,tech support / remote access,False
+scam_02_medicare_ssn,scam,Medicare card / identity theft,False
+scam_03_romance_wire,scam,romance scam,False
+scam_04_lottery_fee,scam,prize / lottery,False
+scam_05_utility_shutoff,scam,utility shutoff,False
+scam_06_amazon_refund,scam,refund overpayment,False
+scam_07_kidnapping_ransom,scam,virtual kidnapping / voice clone,False
+scam_08_social_security_suspended,scam,government impersonation,False
+scam_09_fake_lawyer_followup,scam,"grandparent scam, second caller",False
+scam_10_crypto_investment,scam,investment / crypto,False
+normal_01_pharmacy_refill,normal,pharmacy reminder,False
+normal_02_doctor_appointment,normal,appointment reminder,False
+normal_03_granddaughter_twenty,normal,family asks for small money (hard),True
+normal_04_police_fundraiser,normal,community police event (hard),True
+normal_05_bank_appointment,normal,bank branch scheduling (hard),True
+normal_06_friend_lunch,normal,friend making plans,False
+normal_07_delivery_driver,normal,delivery,False
+normal_08_son_urgent_real,normal,"real family urgency, no money ask (hard)",True
+normal_09_verification_code_self,normal,real support call where USER initiated (hard),True
+normal_10_charity_mail,normal,"charity, no pressure (hard)",True

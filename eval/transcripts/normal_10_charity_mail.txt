@@ -1,0 +1,5 @@
+Caller: Hello, I'm a volunteer with the local food bank. We're thanking past donors for their support this year.
+You: Oh, you're welcome. I'm happy to help.
+Caller: We'll be mailing our holiday newsletter next month. If you'd like to give again, there's an envelope inside, but there's absolutely no pressure.
+You: I'll look for it.
+Caller: Thank you so much, and have a wonderful holiday.

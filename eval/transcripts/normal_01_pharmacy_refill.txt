@@ -1,0 +1,5 @@
+Caller: Hi, this is Linda from Main Street Pharmacy. I'm calling to let you know your prescription refill is ready for pickup.
+You: Oh good, thank you.
+Caller: We're open until eight tonight, and the copay is the same as last month. Is there anything else you need?
+You: No, I'll stop by this afternoon.
+Caller: Sounds good. See you then.

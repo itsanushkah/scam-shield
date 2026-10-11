@@ -1,0 +1,5 @@
+Caller: This is the disconnection department at the electric company. Your account is past due and a technician is on the way to shut off your power within thirty minutes.
+You: I paid my bill last week!
+Caller: Our records show no payment. To stop the shutoff you must pay four hundred dollars immediately using Zelle or a prepaid card.
+You: Can I call the number on my bill?
+Caller: There's no time for that ma'am. If you hang up, the technician will disconnect you.

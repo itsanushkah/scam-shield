@@ -1,0 +1,5 @@
+Caller: Thanks for calling the help desk at the library. How can I help?
+You: I'm trying to log into the e-book app and it sent me a code.
+Caller: Great, just type that code into the app yourself. Don't read it to me, I don't need it.
+You: Okay, I typed it in. It worked!
+Caller: Wonderful. Enjoy your books, and call us back anytime.
