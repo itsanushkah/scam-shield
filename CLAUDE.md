@@ -165,11 +165,27 @@ scam-shield/
 ---
 
 ## Demo video script (90 s)
-1. **0–10 s:** The hook. Voice-clone scams target grandparents, and Scam Shield runs entirely on the phone.
-2. **10–25 s:** A normal call. The transcript scrolls and the meter stays green.
-3. **25–60 s:** The "grandson in jail" call. Signals light up, the meter climbs, and the red alert fires with a plain-English reason and what to do.
-4. **60–75 s:** Wifi off on camera, everything still works, and the eval numbers.
-5. **75–90 s:** The YC RFS fit, why on-device matters (nobody wants a cloud listening to their calls), and what's next.
+
+Solo presenter. Use the two short calls (`short_normal_checkin` 16 s, `short_scam_bail` 24 s). **Don't claim it runs on a phone today.** Claim: runs entirely on this laptop, offline, with phone-sized models.
+
+1. **0–10 s, hook.** Voice-clone scams target grandparents. Scam Shield listens to the call and warns them in real time, and nothing ever leaves the device.
+2. **10–28 s, normal call** (`short_normal_checkin`). Real grandson says "Grandma, it's me". Transcript scrolls, meter stays green.
+3. **28–55 s, scam call** (`short_scam_bail`). Police, bail "right now", "don't tell Mom", gift cards. Meter goes red at ~11 s and the full-screen alert says what to do.
+4. **55–72 s, proof.** Wifi off on camera, still works. Eval: 9 of 10 held-out scams caught, 1 false alarm out of 10 real calls, untuned. Keyword rules alone caught 4/10, so the local AI matters.
+5. **72–90 s, why and what's next.** YC RFS fit (AI for the aging population, proving you're human). Nobody wants a cloud listening to their calls. Models are phone-sized (150 MB speech + 3B LLM, ~2 GB), the same class Apple and Google now run on phones. Next: phone app (speakerphone mode first), then dialer integration with a phone maker or carrier.
+
+## Pitch notes: how this gets onto a phone
+
+- **Models fit.** Whisper base.en (~150 MB) runs on phones via whisper.cpp or the OS's on-device speech recognition. 3B-class LLMs run on recent phones (llama.cpp, MLC, ExecuTorch), and Apple (Foundation Models) and Google (Gemini Nano) ship small on-device models to apps.
+- **The real blocker is call audio, not AI.** Ordinary apps can't listen to regular cellular calls on iOS or Android. Say this before judges ask. Routes:
+  1. Built into the phone/dialer via a phone maker or carrier partnership. Google already shows an on-device scam warning on Pixel, which proves demand and feasibility. Our angle: built for older adults (plain-English reason, one clear instruction), not limited to the newest Pixels.
+  2. **Speakerphone mode:** call on speaker, Scam Shield listens on a second device (tablet, old phone). Works today on any phone. This is what the live demo shows.
+  3. Own calling app for in-app internet calls (e.g. a family "safe line").
+- Double-check current platform rules before stating specifics on camera.
+
+## Live demo plan (if selected, solo)
+
+Live mic mode, with **your own phone playing the scammer**: play `short_scam_bail.wav` on the phone's speaker next to the laptop, the laptop mic hears it, and the alert fires live. Shows speakerphone mode and offline operation without a second person. Backup: demo mode with the same file.
 
 ---
 
