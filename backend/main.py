@@ -49,7 +49,8 @@ async def call_session(ws: WebSocket):
     await ws.accept()
     llm_state = "ok" if ws.app.state.llm_ok else "down"
     await ws.send_json({"type": "status", "stt": "ok", "llm": llm_state, "offline": True})
-    stream = None  # background task feeding audio for the current call
+    stream = None  # background task running the current call
+    mic = None  # live mode: queue of PCM16 frames from the browser
 
     try:
         while True:
@@ -58,8 +59,10 @@ async def call_session(ws: WebSocket):
             if msg["type"] == "websocket.disconnect":
                 break
 
-            # Binary frames are live-mode PCM audio. Handled in a later part.
+            # Binary frames are live-mode mic audio: 16 kHz mono PCM16.
             if msg.get("bytes") is not None:
+                if mic is not None:
+                    mic.put_nowait(msg["bytes"])
                 continue
 
             data = _parse(msg.get("text"))
@@ -69,21 +72,28 @@ async def call_session(ws: WebSocket):
 
             if data.get("type") == "start":
                 mode = data.get("mode", "demo")
-                sample = data.get("sample")
-                if mode != "demo":
-                    await ws.send_json({"type": "error", "message": "live mode not implemented yet"})
+                sample = data.get("sample") if mode == "demo" else None
+                if mode == "live":
+                    await _cancel(stream)
+                    mic = asyncio.Queue()
+                    stream = asyncio.create_task(_run_call(ws, audio.live_chunks(mic)))
+                elif mode == "demo":
+                    try:
+                        samples = audio.load_wav(audio.sample_path(sample or ""))
+                    except (FileNotFoundError, ValueError) as e:
+                        await ws.send_json({"type": "error", "message": str(e)})
+                        continue
+                    await _cancel(stream)
+                    mic = None
+                    duration = len(samples) / audio.SAMPLE_RATE
+                    stream = asyncio.create_task(_run_call(ws, audio.stream_chunks(samples), duration))
+                else:
+                    await ws.send_json({"type": "error", "message": f"unknown mode: {mode}"})
                     continue
-                try:
-                    samples = audio.load_wav(audio.sample_path(sample or ""))
-                except (FileNotFoundError, ValueError) as e:
-                    await ws.send_json({"type": "error", "message": str(e)})
-                    continue
-                await _cancel(stream)
-                stream = asyncio.create_task(_run_demo(ws, samples))
                 await ws.send_json({"type": "status", "state": "started", "mode": mode, "sample": sample})
             elif data.get("type") == "stop":
                 await _cancel(stream)
-                stream = None
+                stream, mic = None, None
                 await ws.send_json({"type": "status", "state": "stopped"})
             else:
                 await ws.send_json({"type": "error", "message": f"unknown type: {data.get('type')}"})
@@ -93,18 +103,22 @@ async def call_session(ws: WebSocket):
         await _cancel(stream)
 
 
-async def _run_demo(ws: WebSocket, samples):
-    """Stream a demo WAV at real-time speed and send what's said as it's heard."""
+async def _run_call(ws: WebSocket, chunks, duration: float | None = None):
+    """Run one call: transcribe each audio chunk as it arrives, score it, and send events.
+
+    chunks is audio.stream_chunks (demo WAV, real-time paced) or audio.live_chunks (mic).
+    duration is known for demo files only, so the final chunk can keep its last word.
+    """
     transcriber = stt.Transcriber()
-    duration = len(samples) / audio.SAMPLE_RATE
     heard = []  # every word so far, with call-time stamps
     scores = fusion.Fusion()
     llm_task = None
 
     try:
-        async for t_start, t_end, chunk in audio.stream_chunks(samples):
+        async for t_start, t_end, chunk in chunks:
+            is_last = duration is not None and t_end >= duration
             # Whisper blocks for ~0.5 s, so keep it off the event loop.
-            words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, t_end >= duration)
+            words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, is_last)
             if not words:
                 continue
 
