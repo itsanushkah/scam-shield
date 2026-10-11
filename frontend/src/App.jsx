@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import AlertBanner from './AlertBanner.jsx'
+import CallSummary from './CallSummary.jsx'
 import ControlPanel from './ControlPanel.jsx'
 import PhoneFrame from './PhoneFrame.jsx'
 import RiskMeter from './RiskMeter.jsx'
@@ -14,6 +15,9 @@ export default function App() {
   const [dismissedCall, setDismissedCall] = useState(null)
   const showAlert = call.alert && dismissedCall !== call.callNumber
   const dismiss = () => setDismissedCall(call.callNumber)
+  // After the call ends, a summary of what happened, until closed.
+  const [closedSummary, setClosedSummary] = useState(null)
+  const showSummary = call.summary && !showAlert && closedSummary !== call.callNumber
 
   return (
     <main className="flex min-h-screen flex-wrap items-center justify-center gap-x-14 gap-y-8 bg-gradient-to-br from-slate-100 via-slate-200 to-emerald-100 p-4">
@@ -51,6 +55,8 @@ export default function App() {
             onDismiss={dismiss}
           />
         )}
+
+        {showSummary && <CallSummary summary={call.summary} onClose={() => setClosedSummary(call.callNumber)} />}
       </PhoneFrame>
     </main>
   )
