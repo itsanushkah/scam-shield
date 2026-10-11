@@ -1,0 +1,109 @@
+{
+  "_about": "Demo call scripts for Scam Shield. 'caller' is the person calling in; 'you' is the person Scam Shield protects. label = scam | normal. alert_line = index of the first line where a good detector should be at RED (scam calls only). Numbers are spelled out so the TTS reads them cleanly.",
+  "calls": [
+    {
+      "id": "normal_grandson_checkin",
+      "label": "normal",
+      "title": "Real grandson checking in (hard negative: says 'Grandma, it's me')",
+      "voices": {"caller": "am_michael", "you": "bf_emma"},
+      "lines": [
+        ["caller", "Hey Grandma, it's me, Ethan!"],
+        ["you", "Ethan! Oh, what a nice surprise. How are you, sweetheart?"],
+        ["caller", "I'm good. Classes are busy, but I finally finished my big project this week."],
+        ["you", "Oh, I'm so proud of you. Are you eating enough up there?"],
+        ["caller", "I am, I promise. Mom keeps sending me those frozen lasagnas."],
+        ["you", "Good. Your mother always did make the best lasagna."],
+        ["caller", "So I was thinking, I'm coming home for Thanksgiving. Can I bring my roommate, Jake? His family is too far away."],
+        ["you", "Of course you can. The more the merrier. Does he like pumpkin pie?"],
+        ["caller", "He loves it. I told him yours is the best in the state."],
+        ["you", "Well, now I have to make two of them."],
+        ["caller", "Ha, perfect. Alright Grandma, I have to run to class. I'll call you on Sunday like always."],
+        ["you", "Okay honey. I love you. Drive safe when you come home."],
+        ["caller", "Love you too. Bye Grandma!"]
+      ]
+    },
+    {
+      "id": "scam_grandson_bail",
+      "label": "scam",
+      "title": "HERO DEMO: 'grandson in jail' bail scam with gift cards and secrecy",
+      "voices": {"caller": "am_adam", "you": "bf_emma"},
+      "alert_line": 8,
+      "lines": [
+        ["caller", "Grandma? Grandma, it's me."],
+        ["you", "Ethan? Is that you? You sound different."],
+        ["caller", "Yeah, I, I have a cold, and I've been crying. Grandma, I'm in really big trouble."],
+        ["you", "Oh no. What happened, honey?"],
+        ["caller", "I was in a car accident, and the police arrested me. I'm calling from the station right now."],
+        ["you", "Arrested? Oh my goodness. Are you hurt?"],
+        ["caller", "I'm okay, but I need bail money or they're going to keep me here tonight. Please, I need it right now."],
+        ["you", "How much do you need? Should I call your mother?"],
+        ["caller", "No! Please don't tell Mom or Dad. They'll be so angry. Please, just keep this between us."],
+        ["you", "Well, okay. I don't want you to be in trouble."],
+        ["caller", "My lawyer says the fastest way is gift cards. Can you go to the store and buy Google Play gift cards? Two thousand dollars."],
+        ["you", "Gift cards? For bail? That seems strange."],
+        ["caller", "It's how they do it here, Grandma. And don't hang up. Stay on the line with me while you drive to the store, okay?"],
+        ["you", "Okay. Okay, I'm getting my keys."],
+        ["caller", "When you have them, scratch off the back and read me the numbers. Please hurry, before it's too late."]
+      ]
+    },
+    {
+      "id": "scam_irs_warrant",
+      "label": "scam",
+      "title": "Government impersonation: fake IRS agent threatening arrest",
+      "voices": {"caller": "bm_george", "you": "af_sarah"},
+      "alert_line": 6,
+      "lines": [
+        ["caller", "Hello, this is Officer Daniel Brooks with the Internal Revenue Service. Am I speaking with Margaret Hill?"],
+        ["you", "Yes, this is Margaret. What is this about?"],
+        ["caller", "Ma'am, our records show you owe four thousand two hundred dollars in back taxes from the last three years."],
+        ["you", "That can't be right. My son does my taxes every year."],
+        ["caller", "I understand, ma'am, but there is a warrant out for your arrest. Local police will be at your home within the hour."],
+        ["you", "The police? Oh dear. What do I do?"],
+        ["caller", "You can resolve this today. You must make a payment immediately, using Bitcoin or gift cards. That is the only way to cancel the warrant."],
+        ["you", "I don't even know what Bitcoin is."],
+        ["caller", "That's alright, I will stay on the line and walk you through it. Do not speak to anyone else about this case, including your son. It is confidential."],
+        ["you", "I'm very scared. Can I call you back?"],
+        ["caller", "No ma'am. If you hang up, the warrant goes into effect automatically. Do you have your purse with you right now?"]
+      ]
+    },
+    {
+      "id": "normal_bank_fraud_alert",
+      "label": "normal",
+      "title": "Legit bank fraud alert (hard negative: bank + card + account talk, never asks for codes)",
+      "voices": {"caller": "af_nicole", "you": "bm_lewis"},
+      "lines": [
+        ["caller", "Hi, this is Rachel from the fraud department at First Valley Bank. Is this Robert Chen?"],
+        ["you", "Yes, this is Robert."],
+        ["caller", "Thanks, Robert. We noticed an unusual charge on your debit card and wanted to check with you. Did you make a purchase at an electronics store in Ohio this morning?"],
+        ["you", "No, I've been home all day. I didn't buy anything."],
+        ["caller", "Okay, thank you. I've blocked that charge, and we'll send you a new card in the mail within five to seven days."],
+        ["you", "Oh good. Do you need anything from me?"],
+        ["caller", "No, nothing at all. And just so you know, we will never ask you for your PIN, your password, or a code we text you."],
+        ["you", "That's good to know."],
+        ["caller", "If you want to double check this call, you can hang up and dial the number on the back of your card. Anyone there can see this note on your account."],
+        ["you", "I appreciate that. Thank you for catching it."],
+        ["caller", "You're welcome, Robert. Have a good rest of your day."]
+      ]
+    },
+    {
+      "id": "scam_bank_code",
+      "label": "scam",
+      "title": "Fake bank fraud call that steals a one-time code (contrast with the legit bank call)",
+      "voices": {"caller": "am_fenrir", "you": "bm_lewis"},
+      "alert_line": 6,
+      "lines": [
+        ["caller", "Hello, this is Mark from the security team at First Valley Bank. Is this Robert Chen?"],
+        ["you", "Yes, this is Robert."],
+        ["caller", "Robert, someone is trying to take money out of your checking account right now. I need to move quickly to stop it."],
+        ["you", "Oh no. What's happening?"],
+        ["caller", "They're trying to wire two thousand dollars overseas. I can freeze your account, but I need to verify that you're the real owner."],
+        ["you", "Okay, how do I do that?"],
+        ["caller", "We just texted a six digit verification code to your phone. Please read me that code right now so I can stop the transfer."],
+        ["you", "The text says the bank will never ask for this code."],
+        ["caller", "That message is for other situations. This is an emergency, sir. If you don't read me the code in the next minute, the money is gone."],
+        ["you", "I don't know. This doesn't feel right."],
+        ["caller", "Please, sir, don't hang up, and don't call the branch, they can't help with this. Just read me the code."]
+      ]
+    }
+  ]
+}
