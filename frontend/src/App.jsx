@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import PhoneFrame from './PhoneFrame.jsx'
+import RiskMeter from './RiskMeter.jsx'
 import Transcript from './Transcript.jsx'
 import { useCallSocket } from './useCallSocket.js'
 
@@ -13,8 +14,7 @@ export default function App() {
       <PhoneFrame>
         <CallHeader key={call.callNumber} live={live} ended={call.callState === 'ended'} />
 
-        {/* Full risk meter comes in part 8. */}
-        <RiskBox score={call.score} live={live} />
+        <RiskMeter score={call.score} live={live} />
 
         <Transcript lines={call.transcript} live={live} />
 
@@ -23,25 +23,6 @@ export default function App() {
 
       <DemoPanel call={call} />
     </main>
-  )
-}
-
-const LEVEL_STYLE = {
-  green: { box: 'bg-emerald-600', title: 'Looks safe', sub: 'text-emerald-100' },
-  yellow: { box: 'bg-amber-500', title: 'Be careful', sub: 'text-amber-50' },
-  red: { box: 'bg-red-600', title: 'Likely a scam', sub: 'text-red-100' },
-}
-
-function RiskBox({ score, live }) {
-  const style = LEVEL_STYLE[score?.level ?? 'green']
-  const title = score ? style.title : live ? 'Listening' : 'Ready'
-  const detail = score && score.level !== 'green' ? score.reason : 'No warning signs yet'
-
-  return (
-    <section className={`mx-5 rounded-2xl px-5 py-4 text-center transition-colors ${style.box}`}>
-      <p className="text-2xl font-bold">{title}</p>
-      <p className={`text-lg ${style.sub}`}>{detail}</p>
-    </section>
   )
 }
 
