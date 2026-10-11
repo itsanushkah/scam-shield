@@ -9,7 +9,7 @@ Built at c0mpiled-15 (Penn State, Sun Oct 11 2026, building 12:00–7:00 PM).
 
 ### Setup picks (measured Sat Oct 10 on this laptop)
 - **Laptop:** Apple M2, macOS. Python 3.11.5 in `.venv`.
-- **STT:** faster-whisper `small.en`, int8 CPU. It transcribed the 74 s hero call in 12.6 s (`base.en`: 4.6 s, no punctuation). Backup: `mlx-whisper` `mlx-community/whisper-base.en-mlx` at 0.9 s. **ffmpeg is not installed**, so pass mlx a float32 numpy array, never a file path.
+- **STT:** faster-whisper **`base.en`**, int8 CPU, `beam_size=1`, `temperature=0`, `max_new_tokens=64`. On live 3 s chunks it averaged 0.6 s per chunk (max 0.83 s) with 5.1% WER on the hero call. `small.en` was no more accurate on chunks and spiked to 7 s, so it's out. Temperature fallback caused 13 s spikes, so keep it off. Backup: `mlx-whisper` `mlx-community/whisper-base.en-mlx` at 0.9 s. **ffmpeg is not installed**, so pass mlx a float32 numpy array, never a file path.
 - **LLM:** Ollama `llama3.2:3b`, 1.6 s warm, risk 95 with a specific reason. `qwen2.5:3b` is also pulled (1.2 s warm, but its reasons are more generic). First call after load takes 6–10 s, so warm up at backend startup and send `keep_alive`.
 - **Frontend:** Node 24.21.0 + npm 11 (official binary in `~/.local/node-v24`, put first on PATH via `~/.zshrc`). The old Node 20.13 in `/usr/local/bin` is too old for Vite 8, so if `node --version` shows 20.x, open a new terminal. Homebrew has no Node bottle for this macOS, so don't `brew install node` (it compiles from source and takes ages).
 - **Disk is nearly full** (~3.5 GB free). Don't pull more models.
