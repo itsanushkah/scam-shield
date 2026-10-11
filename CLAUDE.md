@@ -19,7 +19,7 @@ Built at c0mpiled-15 (Penn State, Sun Oct 11 2026, building 12:00–7:00 PM).
 ## Rules for working in this repo (read first)
 
 - **Never add Claude as a co-author.** No `Co-Authored-By` trailer on any commit.
-- **Commits: you may commit and push yourself.** Break each build part into several small commits (one logical step each, every one working), with clear messages. Test a part before committing it.
+- **Commits: you may commit and push yourself.** Break each build part into several small commits (one logical step each, every one working). **Commit messages: short, lowercase, plain words, like a person would write** (e.g. `add audio chunking`, `fix stop button`, `hook up whisper`). No long descriptive sentences, no bodies. Test a part before committing it.
 - **Push after each part** to `origin` (private repo: https://github.com/itsanushkah/scam-shield, branch `main`).
 - **Still ask first** before force-pushing, rewriting pushed history, changing the repo's visibility (it stays private until I say), or creating other GitHub repos.
 - **Setup commands are OK to run yourself** (installing packages, downloading models/tools, test runs), but say what you're about to download or change first.
