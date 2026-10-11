@@ -10,6 +10,7 @@ export function useCallSocket() {
   const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
   const [lastChunk, setLastChunk] = useState(null)
   const [error, setError] = useState(null)
+  const [callNumber, setCallNumber] = useState(0)
 
   useEffect(() => {
     let closedByUs = false
@@ -54,6 +55,7 @@ export function useCallSocket() {
     (sample) => {
       setError(null)
       setLastChunk(null)
+      setCallNumber((n) => n + 1)
       send({ type: 'start', mode: 'demo', sample })
     },
     [send],
@@ -61,5 +63,5 @@ export function useCallSocket() {
 
   const stop = useCallback(() => send({ type: 'stop' }), [send])
 
-  return { connected, callState, lastChunk, error, start, stop }
+  return { connected, callState, callNumber, lastChunk, error, start, stop }
 }
