@@ -1,0 +1,566 @@
+{
+  "model": "llama3.2:3b",
+  "summary": {
+    "rules": {
+      "accuracy": 0.7,
+      "scams_caught": "4/10",
+      "false_alarms": "0/10",
+      "hard_negative_false_alarms": "0/6",
+      "missed": [
+        "scam_02_medicare_ssn",
+        "scam_04_lottery_fee",
+        "scam_06_amazon_refund",
+        "scam_07_kidnapping_ransom",
+        "scam_09_fake_lawyer_followup",
+        "scam_10_crypto_investment"
+      ],
+      "false_alarm_ids": []
+    },
+    "llm": {
+      "accuracy": 0.9,
+      "scams_caught": "9/10",
+      "false_alarms": "1/10",
+      "hard_negative_false_alarms": "1/6",
+      "missed": [
+        "scam_02_medicare_ssn"
+      ],
+      "false_alarm_ids": [
+        "normal_09_verification_code_self"
+      ]
+    },
+    "fused": {
+      "accuracy": 0.9,
+      "scams_caught": "9/10",
+      "false_alarms": "1/10",
+      "hard_negative_false_alarms": "1/6",
+      "missed": [
+        "scam_02_medicare_ssn"
+      ],
+      "false_alarm_ids": [
+        "normal_09_verification_code_self"
+      ]
+    }
+  },
+  "calls": [
+    {
+      "id": "scam_01_tech_support",
+      "label": "scam",
+      "hard": false,
+      "type": "tech support / remote access",
+      "lines": 5,
+      "llm_seconds": 1.89,
+      "rules": {
+        "flagged": true,
+        "first_red_line": 4,
+        "final_risk": 88,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 98,
+        "reason": "This sounds like a classic scam. Microsoft would never call you like this."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 100,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      }
+    },
+    {
+      "id": "scam_02_medicare_ssn",
+      "label": "scam",
+      "hard": false,
+      "type": "Medicare card / identity theft",
+      "lines": 5,
+      "llm_seconds": 1.5,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 64,
+        "reason": "The caller is asking for a code or PIN and says they're family, a bank, police or the government."
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 16,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 65,
+        "reason": "The caller is asking for a code or PIN and says they're family, a bank, police or the government."
+      }
+    },
+    {
+      "id": "scam_03_romance_wire",
+      "label": "scam",
+      "hard": false,
+      "type": "romance scam",
+      "lines": 5,
+      "llm_seconds": 1.84,
+      "rules": {
+        "flagged": true,
+        "first_red_line": 4,
+        "final_risk": 73,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 3,
+        "final_risk": 96,
+        "reason": "This sounds like a scammer claiming to be a family member in need. They're asking for money and want it wired."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 98,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      }
+    },
+    {
+      "id": "scam_04_lottery_fee",
+      "label": "scam",
+      "hard": false,
+      "type": "prize / lottery",
+      "lines": 5,
+      "llm_seconds": 1.78,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 33,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 98,
+        "reason": "This sounds like a scam. Legitimate prizes don't ask for upfront payment or taxes."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 98,
+        "reason": "This sounds like a scam. Legitimate prizes don't ask for upfront payment."
+      }
+    },
+    {
+      "id": "scam_05_utility_shutoff",
+      "label": "scam",
+      "hard": false,
+      "type": "utility shutoff",
+      "lines": 5,
+      "llm_seconds": 2.01,
+      "rules": {
+        "flagged": true,
+        "first_red_line": 4,
+        "final_risk": 83,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 97,
+        "reason": "They're threatening to shut off power and are asking for payment in a specific way."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 98,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      }
+    },
+    {
+      "id": "scam_06_amazon_refund",
+      "label": "scam",
+      "hard": false,
+      "type": "refund overpayment",
+      "lines": 5,
+      "llm_seconds": 1.66,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 52,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 97,
+        "reason": "This is a classic scam. They're asking for remote access and payment via gift cards."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 99,
+        "reason": "They're asking for remote access and claiming a mistake with a large payment. This is a classic scam."
+      }
+    },
+    {
+      "id": "scam_07_kidnapping_ransom",
+      "label": "scam",
+      "hard": false,
+      "type": "virtual kidnapping / voice clone",
+      "lines": 5,
+      "llm_seconds": 1.88,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 68,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 97,
+        "reason": "This is a classic scam, pretending to be a family member in distress."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 2,
+        "final_risk": 99,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and wants you to keep it secret."
+      }
+    },
+    {
+      "id": "scam_08_social_security_suspended",
+      "label": "scam",
+      "hard": false,
+      "type": "government impersonation",
+      "lines": 5,
+      "llm_seconds": 2.75,
+      "rules": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 94,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and is asking for a code or PIN."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 98,
+        "reason": "They're trying to scare you into sending money to a Bitcoin machine. This is a classic scam."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 100,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and is asking for a code or PIN."
+      }
+    },
+    {
+      "id": "scam_09_fake_lawyer_followup",
+      "label": "scam",
+      "hard": false,
+      "type": "grandparent scam, second caller",
+      "lines": 5,
+      "llm_seconds": 3.21,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 64,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and says they're family, a bank, police or the government."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 4,
+        "final_risk": 75,
+        "reason": "This sounds like a scam. No real lawyer would ask for cash in this way."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 4,
+        "final_risk": 90,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and says they're family, a bank, police or the government."
+      }
+    },
+    {
+      "id": "scam_10_crypto_investment",
+      "label": "scam",
+      "hard": false,
+      "type": "investment / crypto",
+      "lines": 5,
+      "llm_seconds": 4.72,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 49,
+        "reason": "The caller wants money by gift card, wire or Bitcoin and says they're family, a bank, police or the government."
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 0,
+        "final_risk": 97,
+        "reason": "This sounds like a scam, with unusually high returns and a request for sensitive info."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 1,
+        "final_risk": 98,
+        "reason": "This sounds like a scam, with unusually high returns and no risk."
+      }
+    },
+    {
+      "id": "normal_01_pharmacy_refill",
+      "label": "normal",
+      "hard": false,
+      "type": "pharmacy reminder",
+      "lines": 5,
+      "llm_seconds": 4.21,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_02_doctor_appointment",
+      "label": "normal",
+      "hard": false,
+      "type": "appointment reminder",
+      "lines": 5,
+      "llm_seconds": 3.82,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_03_granddaughter_twenty",
+      "label": "normal",
+      "hard": true,
+      "type": "family asks for small money (hard)",
+      "lines": 6,
+      "llm_seconds": 4.82,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 12,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 3,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 12,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_04_police_fundraiser",
+      "label": "normal",
+      "hard": true,
+      "type": "community police event (hard)",
+      "lines": 5,
+      "llm_seconds": 4.86,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_05_bank_appointment",
+      "label": "normal",
+      "hard": true,
+      "type": "bank branch scheduling (hard)",
+      "lines": 5,
+      "llm_seconds": 3.85,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 3,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_06_friend_lunch",
+      "label": "normal",
+      "hard": false,
+      "type": "friend making plans",
+      "lines": 5,
+      "llm_seconds": 3.75,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_07_delivery_driver",
+      "label": "normal",
+      "hard": false,
+      "type": "delivery",
+      "lines": 5,
+      "llm_seconds": 3.38,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_08_son_urgent_real",
+      "label": "normal",
+      "hard": true,
+      "type": "real family urgency, no money ask (hard)",
+      "lines": 5,
+      "llm_seconds": 3.49,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 2,
+        "reason": ""
+      }
+    },
+    {
+      "id": "normal_09_verification_code_self",
+      "label": "normal",
+      "hard": true,
+      "type": "real support call where USER initiated (hard)",
+      "lines": 5,
+      "llm_seconds": 4.69,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 0,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": true,
+        "first_red_line": 3,
+        "final_risk": 68,
+        "reason": "They're asking you to type in a code yourself, which is suspicious."
+      },
+      "fused": {
+        "flagged": true,
+        "first_red_line": 3,
+        "final_risk": 73,
+        "reason": "They're asking you to type in a code yourself, which is suspicious."
+      }
+    },
+    {
+      "id": "normal_10_charity_mail",
+      "label": "normal",
+      "hard": true,
+      "type": "charity, no pressure (hard)",
+      "lines": 5,
+      "llm_seconds": 4.62,
+      "rules": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      },
+      "llm": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 4,
+        "reason": ""
+      },
+      "fused": {
+        "flagged": false,
+        "first_red_line": null,
+        "final_risk": 25,
+        "reason": ""
+      }
+    }
+  ]
+}
