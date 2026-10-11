@@ -1,9 +1,11 @@
-// Shown on the phone when a call ends: what happened, in plain words.
+import { CheckIcon, QuestionIcon, WarningIcon } from './icons.jsx'
+
+// Shown when listening stops: what happened, in plain words.
 
 const VERDICTS = {
-  red: { title: 'This was likely a scam', badge: 'bg-red-600', icon: '!' },
-  yellow: { title: 'Some warning signs', badge: 'bg-amber-500', icon: '?' },
-  green: { title: 'This call looked safe', badge: 'bg-emerald-600', icon: '✓' },
+  red: { title: 'This was likely a scam', Icon: WarningIcon },
+  yellow: { title: 'Some warning signs', Icon: QuestionIcon },
+  green: { title: 'No warning signs heard', Icon: CheckIcon },
 }
 
 const SIGNAL_WORDS = {
@@ -21,91 +23,66 @@ export default function CallSummary({ summary, onClose }) {
   const flagged = summary.verdict !== 'green'
 
   return (
-    <div
-      role="dialog"
-      aria-labelledby="summary-title"
-      className="absolute inset-x-0 bottom-0 top-9 z-20 flex flex-col overflow-y-auto bg-slate-950 px-6 pb-6 pt-5 text-white"
-    >
-      <p className="text-sm font-semibold uppercase tracking-wide text-slate-400">Call summary</p>
+    <div className="summary-overlay" role="dialog" aria-labelledby="summary-title">
+      <p className="summary-label">SESSION SUMMARY</p>
 
-      <div className="mt-3 flex items-center gap-3">
-        <span
-          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-2xl font-extrabold ${v.badge}`}
-        >
-          {v.icon}
+      <div className="summary-verdict">
+        <span className="summary-badge" data-verdict={summary.verdict} aria-hidden="true">
+          <v.Icon />
         </span>
-        <h2 id="summary-title" className="text-2xl font-extrabold leading-tight">
-          {v.title}
-        </h2>
+        <h2 id="summary-title">{v.title}</h2>
       </div>
 
-      <p className="mt-3 text-lg text-slate-300">
-        Call length {clock(summary.duration)}
+      <p className="summary-meta">
+        Listened for {clock(summary.duration)}
         {summary.red_at != null && <> · warning at {clock(summary.red_at)}</>}
       </p>
 
       {flagged ? (
         <>
           {summary.signals.length > 0 && (
-            <Section title="What the caller did">
-              <ul className="space-y-1.5">
+            <Section title="WHAT THE CALLER DID">
+              <ul>
                 {summary.signals.map((s) => (
-                  <li key={s} className="flex gap-2 text-lg">
-                    <span className="text-red-400" aria-hidden="true">
-                      •
-                    </span>
-                    {SIGNAL_WORDS[s] ?? s}
-                  </li>
+                  <li key={s}>{SIGNAL_WORDS[s] ?? s}</li>
                 ))}
               </ul>
             </Section>
           )}
 
           {summary.phrases.length > 0 && (
-            <Section title="What they said">
-              <div className="flex flex-wrap gap-2">
+            <Section title="WHAT THEY SAID">
+              <div className="summary-quotes">
                 {summary.phrases.map((p) => (
-                  <span key={p} className="rounded-lg bg-slate-800 px-2.5 py-1 text-base text-slate-100">
-                    “{p}”
-                  </span>
+                  <span key={p}>“{p}”</span>
                 ))}
               </div>
             </Section>
           )}
 
           {summary.verify && (
-            <Section title={`Check it's really ${summary.verify.name ?? 'them'}`}>
-              <ul className="space-y-1.5">
+            <Section title={`CHECK IT’S REALLY ${(summary.verify.name ?? 'them').toUpperCase()}`}>
+              <ul>
                 {summary.verify.steps.map((step) => (
-                  <li key={step} className="flex gap-2 text-lg">
-                    <span className="text-sky-300" aria-hidden="true">
-                      ✓
-                    </span>
-                    {step}
-                  </li>
+                  <li key={step}>{step}</li>
                 ))}
               </ul>
             </Section>
           )}
 
           {summary.suggested_action && (
-            <Section title="What to do now">
-              <p className="rounded-2xl bg-white px-4 py-3 text-xl font-bold leading-snug text-slate-900">
-                {summary.suggested_action}
-              </p>
+            <Section title="WHAT TO DO NOW">
+              <p className="recommended-action">{summary.suggested_action}</p>
             </Section>
           )}
         </>
       ) : (
-        <p className="mt-6 text-xl leading-snug text-slate-200">No warning signs during this call.</p>
+        <p className="summary-safe">
+          Nothing worrying was heard. If something still feels off, hang up and call back on a number you know.
+        </p>
       )}
 
-      <div className="flex-1" />
-      <button
-        type="button"
-        onClick={onClose}
-        className="mt-6 w-full rounded-2xl border-2 border-white/60 py-3 text-xl font-semibold hover:bg-white/10"
-      >
+      <button type="button" onClick={onClose}>
         Close
       </button>
     </div>
@@ -114,8 +91,8 @@ export default function CallSummary({ summary, onClose }) {
 
 function Section({ title, children }) {
   return (
-    <section className="mt-5">
-      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-400">{title}</h3>
+    <section className="summary-section">
+      <h3>{title}</h3>
       {children}
     </section>
   )

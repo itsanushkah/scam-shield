@@ -11,13 +11,19 @@ export default function Transcript({ lines, live }) {
   }, [lines.length])
 
   return (
-    <section ref={boxRef} className="mx-5 mt-4 flex-1 overflow-y-auto rounded-2xl bg-slate-900 p-5" aria-live="polite">
+    <section ref={boxRef} className="transcript" aria-label="Conversation transcript" aria-live="polite">
+      <div className="transcript-heading">
+        <span>CONVERSATION</span>
+        <span>{live ? 'LIVE' : 'TRANSCRIPT'}</span>
+      </div>
       {lines.length === 0 ? (
-        <p className="text-lg text-slate-400">{live ? 'Listening…' : 'The conversation will appear here.'}</p>
+        <p className="transcript-text transcript-empty">
+          {live ? 'Listening for speech…' : 'The conversation will appear here.'}
+        </p>
       ) : (
-        <p className="text-xl leading-relaxed text-slate-100">
+        <p className="transcript-text">
           {lines.map((line, i) => (
-            <span key={i} className={i === lines.length - 1 ? 'text-white' : 'text-slate-300'}>
+            <span key={i} className={i === lines.length - 1 ? 'latest' : undefined}>
               {line.text}{' '}
             </span>
           ))}
