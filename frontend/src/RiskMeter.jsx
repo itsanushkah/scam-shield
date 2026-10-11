@@ -7,12 +7,13 @@ const LEVELS = {
   red: { title: 'Likely a scam', panel: 'bg-red-600', sub: 'text-red-50' },
 }
 
+// What the caller is doing, in plain present-tense words.
 const SIGNAL_WORDS = {
-  payment_request: 'Asks for money',
-  credential_request: 'Asks for a code',
-  secrecy: 'Wants secrecy',
+  payment_request: 'Asking for money',
+  credential_request: 'Asking for a code',
+  secrecy: 'Wants it kept secret',
   urgency: 'Rushing you',
-  impersonation: 'Pretending',
+  impersonation: 'Pretending to be someone',
 }
 
 export default function RiskMeter({ score, live }) {
@@ -34,18 +35,35 @@ export default function RiskMeter({ score, live }) {
 
       <Bar risk={risk} />
 
-      <p className={`mt-2 text-lg leading-snug ${style.sub}`}>{score?.reason || 'No warning signs yet'}</p>
-
-      {score?.signals?.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-1.5">
-          {score.signals.map((s) => (
-            <li key={s} className={`rounded-full px-2.5 py-0.5 text-sm font-semibold ${darkText ? 'bg-black/15' : 'bg-white/20'}`}>
-              {SIGNAL_WORDS[s] ?? s}
-            </li>
-          ))}
-        </ul>
+      {score?.evidence?.length > 0 ? (
+        <Evidence rows={score.evidence} chip={darkText ? 'bg-black/15' : 'bg-white/20'} />
+      ) : (
+        <p className={`mt-2 text-lg leading-snug ${style.sub}`}>{score?.reason || 'No warning signs yet'}</p>
       )}
     </section>
+  )
+}
+
+// The reasons, building up as the call goes on: one row per thing the caller is doing,
+// with their own words. Rows and quotes are keyed, so only new ones animate in.
+function Evidence({ rows, chip }) {
+  return (
+    <ul className="mt-3 space-y-1.5">
+      {rows.map((row) => (
+        <li key={row.signal} className="evidence-in">
+          <span className="text-base font-bold">{SIGNAL_WORDS[row.signal] ?? row.signal}</span>
+          {row.phrases.length > 0 && (
+            <span className="ml-1.5 inline-flex flex-wrap gap-1 align-middle">
+              {row.phrases.map((p) => (
+                <span key={p} className={`evidence-in rounded-md px-1.5 py-0.5 text-sm ${chip}`}>
+                  “{p}”
+                </span>
+              ))}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
   )
 }
 

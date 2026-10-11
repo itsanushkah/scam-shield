@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+/* New evidence fades in, so viewers can see the reasons build up during a call. */
+@keyframes evidence-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.evidence-in {
+  animation: evidence-in 0.5s ease-out;
+}
