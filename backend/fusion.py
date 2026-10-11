@@ -14,6 +14,9 @@ ALPHA_UP = 0.75  # weight of a new, higher score
 ALPHA_DOWN = 0.25  # weight of a new, lower score
 
 
+LEVELS = ["green", "yellow", "red"]
+
+
 def level_for(risk: float) -> str:
     return "red" if risk > RED_ABOVE else "yellow" if risk >= GREEN_BELOW else "green"
 
@@ -29,6 +32,8 @@ class Fusion:
         self.peak = 0
         self.reason = ""
         self.action = ""
+        self.worst_level = "green"  # for the end-of-call summary
+        self.signals_seen = set()
 
     def update(self, rules: dict | None = None, llm: dict | None = None) -> tuple[dict, dict | None]:
         """Feed a new result. Returns (score event, alert event or None)."""
@@ -56,6 +61,9 @@ class Fusion:
         level = "red" if self.latched else level_for(risk)
 
         self._pick_reason(level)
+        if LEVELS.index(level) > LEVELS.index(self.worst_level):
+            self.worst_level = level
+        self.signals_seen.update(self._signals())
         event = {
             "type": "score",
             "risk": risk,

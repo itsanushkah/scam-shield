@@ -60,6 +60,15 @@ def check_rules_reason_preferred():
     print("ok  concrete rule reason wins over a vaguer LLM one")
 
 
+def check_summary_tracking():
+    f = Fusion()
+    f.update(rules=result(55, "The caller is rushing you.", signals=["urgency"]))
+    f.update(rules=result(100, "The caller wants gift cards.", signals=["payment_request", "secrecy"]))
+    f.update(rules=result(0))
+    assert f.worst_level == "red" and f.signals_seen == {"urgency", "payment_request", "secrecy"}, (f.worst_level, f.signals_seen)
+    print("ok  tracks worst level and every signal seen, for the summary")
+
+
 def check_green_has_no_reason():
     f = Fusion()
     event, _ = f.update(rules=result(25, "The caller says they're from a bank."), llm=result(2))
@@ -75,3 +84,4 @@ if __name__ == "__main__":
     check_llm_alone_can_warn()
     check_rules_reason_preferred()
     check_green_has_no_reason()
+    check_summary_tracking()
