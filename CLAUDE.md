@@ -184,6 +184,10 @@ scam-shield/
 | `scam_irs_warrant.wav` | scam | Fake IRS agent, warrant threat, Bitcoin/gift cards |
 | `normal_bank_fraud_alert.wav` | normal | Legit bank call. Talks about card and account, explicitly never asks for codes. **Must stay green** |
 | `scam_bank_code.wav` | scam | Fake bank call that demands the verification code. Pair with the legit one to show the model understands *intent*, not keywords |
+| `short_normal_checkin.wav` | normal | **For the video (16 s).** Real grandson says "it's me" and talks about Thanksgiving. Stays green |
+| `short_scam_bail.wav` | scam | **For the video (24 s).** Fast grandson bail scam. Red at ~10.5 s |
+
+The two `short_*` calls were made Sunday with Piper (`tools/make_piper_calls.py`, scripts in `samples/scripts/short_calls.json`) because the Kokoro model isn't on this laptop. They use different voices from the long calls.
 
 - `samples/scripts/calls.json` holds the source scripts.
 - `samples/STT_CHECK.md` has the Whisper base.en transcription check: 2–5% WER, all scam keywords correct.
