@@ -9,7 +9,8 @@ import contextlib
 import json
 
 import httpx
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.responses import FileResponse
 
 import audio
 import fusion
@@ -43,6 +44,15 @@ def health():
 def samples():
     """Demo calls the frontend can pick from."""
     return {"samples": audio.list_samples()}
+
+
+@app.get("/samples/{name}")
+def sample_audio(name: str):
+    """The WAV itself, so the browser can play a recording out loud while it's analysed."""
+    try:
+        return FileResponse(audio.sample_path(name), media_type="audio/wav")
+    except FileNotFoundError:
+        raise HTTPException(404, "no such sample")
 
 
 @app.websocket("/ws/call")
