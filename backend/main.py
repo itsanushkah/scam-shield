@@ -20,6 +20,12 @@ def health():
     return {"ok": True}
 
 
+@app.get("/samples")
+def samples():
+    """Demo calls the frontend can pick from."""
+    return {"samples": audio.list_samples()}
+
+
 @app.websocket("/ws/call")
 async def call_session(ws: WebSocket):
     await ws.accept()
