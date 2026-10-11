@@ -173,6 +173,8 @@ async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion, record
 
 async def _send_score(ws: WebSocket, record: CallRecord, event: dict, alert: dict | None):
     record.note_score(event, alert)
+    # Keep adding to "what the caller is doing" for the rest of the call, even after it latches red.
+    event["evidence"] = record.evidence(event["signals"]) if event["level"] != "green" else []
     await ws.send_json(event)
     if alert:
         await ws.send_json(alert)
