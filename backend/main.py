@@ -16,6 +16,7 @@ import fusion
 import llm
 import rules
 import stt
+from summary import CallRecord
 
 WINDOW_S = 60  # score the last minute of the call
 
@@ -112,6 +113,7 @@ async def _run_call(ws: WebSocket, chunks, duration: float | None = None):
     transcriber = stt.Transcriber()
     heard = []  # every word so far, with call-time stamps
     scores = fusion.Fusion()
+    record = CallRecord()  # for the end-of-call summary
     llm_task = None
 
     try:
@@ -119,6 +121,7 @@ async def _run_call(ws: WebSocket, chunks, duration: float | None = None):
             is_last = duration is not None and t_end >= duration
             # Whisper blocks for ~0.5 s, so keep it off the event loop.
             words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, is_last)
+            record.heard_until(t_end)
             if not words:
                 continue
 
@@ -127,21 +130,26 @@ async def _run_call(ws: WebSocket, chunks, duration: float | None = None):
 
             heard.extend(words)
             recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
-            await _send_score(ws, *scores.update(rules=rules.score(recent)))
+            result = rules.score(recent)
+            record.note_rules(result)
+            await _send_score(ws, record, *scores.update(rules=result))
 
             # One LLM call at a time. If it's still busy, skip this chunk rather than queue it.
             if llm_task is None or llm_task.done():
-                llm_task = asyncio.create_task(_ask_llm(ws, recent, scores))
+                llm_task = asyncio.create_task(_ask_llm(ws, recent, scores, record))
 
         if llm_task:
             await llm_task  # let the last answer land before the call ends
     finally:
         await _cancel(llm_task)  # stopped mid-call: don't leave the LLM request running
+        # Sent on a normal end and on stop/hang up. The socket may already be gone.
+        with contextlib.suppress(Exception):
+            await ws.send_json(record.summary(scores))
 
     await ws.send_json({"type": "status", "state": "ended"})
 
 
-async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion):
+async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion, record: CallRecord):
     try:
         result = await llm.score(transcript, ws.app.state.ollama)
     except (httpx.HTTPError, ValueError):
@@ -150,10 +158,11 @@ async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion):
         return
     # Tell the UI the AI check is back, in case an earlier call timed out.
     await ws.send_json({"type": "status", "llm": "ok"})
-    await _send_score(ws, *scores.update(llm=result))
+    await _send_score(ws, record, *scores.update(llm=result))
 
 
-async def _send_score(ws: WebSocket, event: dict, alert: dict | None):
+async def _send_score(ws: WebSocket, record: CallRecord, event: dict, alert: dict | None):
+    record.note_score(event, alert)
     await ws.send_json(event)
     if alert:
         await ws.send_json(alert)
