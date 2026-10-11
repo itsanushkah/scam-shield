@@ -14,15 +14,22 @@ export function useCallSocket() {
   const [transcript, setTranscript] = useState([])
   const [score, setScore] = useState(null)
   const [alert, setAlert] = useState(null) // set once, when the call first turns red
+  const [summary, setSummary] = useState(null) // sent when the call ends
   const [error, setError] = useState(null)
   const [callNumber, setCallNumber] = useState(0)
   const [micLevel, setMicLevel] = useState(0) // 0-1, live mode only
   const stopMicRef = useRef(null)
+  const playerRef = useRef(null) // recording mode: the same file, played out loud
 
   const stopMic = useCallback(() => {
     stopMicRef.current?.()
     stopMicRef.current = null
     setMicLevel(0)
+  }, [])
+
+  const stopPlayer = useCallback(() => {
+    playerRef.current?.pause()
+    playerRef.current = null
   }, [])
 
   useEffect(() => {
@@ -37,6 +44,7 @@ export function useCallSocket() {
         const msg = JSON.parse(e.data)
         if (msg.type === 'status') {
           if (msg.state) setCallState(msg.state)
+          if (msg.state === 'stopped') stopPlayer()
           if (msg.state === 'stopped' || msg.state === 'ended') stopMic()
           if (msg.stt) setConnected(true)
           if (msg.llm) setLlmState(msg.llm)
@@ -46,6 +54,8 @@ export function useCallSocket() {
           setScore(msg)
         } else if (msg.type === 'alert') {
           setAlert(msg)
+        } else if (msg.type === 'summary') {
+          setSummary(msg)
         } else if (msg.type === 'error') {
           setError(msg.message)
         }
@@ -53,6 +63,7 @@ export function useCallSocket() {
 
       ws.onclose = () => {
         stopMic()
+        stopPlayer()
         setConnected(false)
         setCallState((s) => (s === 'started' ? 'stopped' : s))
         if (!closedByUs) retry = setTimeout(connect, RECONNECT_MS)
@@ -65,8 +76,9 @@ export function useCallSocket() {
       clearTimeout(retry)
       wsRef.current?.close()
       stopMic()
+      stopPlayer()
     }
-  }, [stopMic])
+  }, [stopMic, stopPlayer])
 
   const send = useCallback((msg) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) wsRef.current.send(JSON.stringify(msg))
@@ -79,11 +91,17 @@ export function useCallSocket() {
       setTranscript([])
       setScore(null)
       setAlert(null)
+      setSummary(null)
       setCallNumber((n) => n + 1)
       setCallState('starting') // until the backend confirms; stops the old 'ended' showing
       stopMic()
+      stopPlayer()
 
       if (mode === 'demo') {
+        // Play the recording out loud while the backend analyses the same file, so people
+        // watching hear the call. Started on the click, so the browser allows audio.
+        playerRef.current = new Audio(`/samples/${encodeURIComponent(sample)}`)
+        playerRef.current.play().catch((e) => setError(`Couldn't play audio: ${e.message}`))
         send({ type: 'start', mode: 'demo', sample })
         return
       }
@@ -98,13 +116,14 @@ export function useCallSocket() {
         send({ type: 'stop' })
       }
     },
-    [send, stopMic],
+    [send, stopMic, stopPlayer],
   )
 
   const stop = useCallback(() => {
     stopMic()
+    stopPlayer()
     send({ type: 'stop' })
-  }, [send, stopMic])
+  }, [send, stopMic, stopPlayer])
 
-  return { connected, llmState, callState, callNumber, transcript, score, alert, error, micLevel, start, stop }
+  return { connected, llmState, callState, callNumber, transcript, score, alert, summary, error, micLevel, start, stop }
 }
