@@ -1,0 +1,59 @@
+{
+  "id": "short_scam_bail",
+  "label": "scam",
+  "title": "Short: fake grandson, arrest, bail, secrecy, gift cards. Red by line 2",
+  "alert_line": 2,
+  "alert_by_seconds": 9.39,
+  "duration_s": 24.3,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 2.15,
+      "text": "Grandma, it's me. I'm in big trouble."
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 2.6,
+      "end": 4.21,
+      "text": "Ethan? You sound different."
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 4.66,
+      "end": 9.39,
+      "text": "I have a cold. I was in a car accident, and the police arrested me. I need bail money right now."
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 9.84,
+      "end": 11.76,
+      "text": "Oh no! Should I call your mother?"
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 12.21,
+      "end": 18.73,
+      "text": "No, please don't tell Mom. Keep this between us. Buy Google Play gift cards, two thousand dollars, and read me the numbers."
+    },
+    {
+      "i": 5,
+      "speaker": "you",
+      "start": 19.18,
+      "end": 21.3,
+      "text": "Gift cards? That seems strange."
+    },
+    {
+      "i": 6,
+      "speaker": "caller",
+      "start": 21.75,
+      "end": 23.83,
+      "text": "Please hurry, Grandma. And don't hang up."
+    }
+  ]
+}

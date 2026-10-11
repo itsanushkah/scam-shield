@@ -1,0 +1,43 @@
+{
+  "id": "short_normal_checkin",
+  "label": "normal",
+  "title": "Short: real grandson says 'it's me' but asks for nothing. Must stay green",
+  "duration_s": 16.0,
+  "lines": [
+    {
+      "i": 0,
+      "speaker": "caller",
+      "start": 0.0,
+      "end": 2.02,
+      "text": "Hi Grandma, it's me, Ethan!"
+    },
+    {
+      "i": 1,
+      "speaker": "you",
+      "start": 2.47,
+      "end": 5.08,
+      "text": "Ethan! What a nice surprise, sweetheart."
+    },
+    {
+      "i": 2,
+      "speaker": "caller",
+      "start": 5.53,
+      "end": 9.25,
+      "text": "I just wanted to tell you I'm coming home for Thanksgiving. Can I bring my roommate?"
+    },
+    {
+      "i": 3,
+      "speaker": "you",
+      "start": 9.7,
+      "end": 12.38,
+      "text": "Of course you can. I'll bake two pies."
+    },
+    {
+      "i": 4,
+      "speaker": "caller",
+      "start": 12.83,
+      "end": 15.53,
+      "text": "You're the best. Love you, Grandma. See you soon!"
+    }
+  ]
+}
