@@ -19,9 +19,10 @@ Built at c0mpiled-15 (Penn State, Sun Oct 11 2026, building 12:00–7:00 PM).
 ## Rules for working in this repo (read first)
 
 - **Never add Claude as a co-author.** No `Co-Authored-By` trailer on any commit.
-- **Always ask before committing**, every time. Write clear commit messages.
-- **Setup commands are OK to run yourself** (installing packages, downloading models/tools, test runs), but say what you're about to download or change first. **Git commands:** give them to me to run, and say which terminal window to run them in.
-- **Never push, create a GitHub repo, or force-push without asking.**
+- **Commits: you may commit and push yourself.** Break each build part into several small commits (one logical step each, every one working), with clear messages. Test a part before committing it.
+- **Push after each part** to `origin` (private repo: https://github.com/itsanushkah/scam-shield, branch `main`).
+- **Still ask first** before force-pushing, rewriting pushed history, changing the repo's visibility (it stays private until I say), or creating other GitHub repos.
+- **Setup commands are OK to run yourself** (installing packages, downloading models/tools, test runs), but say what you're about to download or change first.
 - **Never add a network call** to the core pipeline (capture → STT → scoring → alert). The only allowed exception is the opt-in family alert (see Stretch goals), and it must be clearly labeled and off by default.
 - **Hackathon rule:** the product must be built during the event. Pre-downloading models and tools is fine; application code gets written on Sunday.
 
