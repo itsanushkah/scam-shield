@@ -11,6 +11,7 @@ export function useCallSocket() {
   const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
   const [transcript, setTranscript] = useState([])
   const [score, setScore] = useState(null)
+  const [alert, setAlert] = useState(null) // set once, when the call first turns red
   const [error, setError] = useState(null)
   const [callNumber, setCallNumber] = useState(0)
 
@@ -32,6 +33,8 @@ export function useCallSocket() {
           setTranscript((lines) => [...lines, { text: msg.text, t: msg.t }])
         } else if (msg.type === 'score') {
           setScore(msg)
+        } else if (msg.type === 'alert') {
+          setAlert(msg)
         } else if (msg.type === 'error') {
           setError(msg.message)
         }
@@ -61,6 +64,7 @@ export function useCallSocket() {
       setError(null)
       setTranscript([])
       setScore(null)
+      setAlert(null)
       setCallNumber((n) => n + 1)
       send({ type: 'start', mode: 'demo', sample })
     },
@@ -69,5 +73,5 @@ export function useCallSocket() {
 
   const stop = useCallback(() => send({ type: 'stop' }), [send])
 
-  return { connected, llmState, callState, callNumber, transcript, score, error, start, stop }
+  return { connected, llmState, callState, callNumber, transcript, score, alert, error, start, stop }
 }
