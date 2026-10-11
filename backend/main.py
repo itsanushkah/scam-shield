@@ -8,9 +8,11 @@ import asyncio
 import contextlib
 import json
 
+import httpx
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 import audio
+import llm
 import rules
 import stt
 
@@ -18,10 +20,13 @@ WINDOW_S = 60  # score the last minute of the call
 
 
 @contextlib.asynccontextmanager
-async def lifespan(_app):
-    # Load Whisper before the first call, so the first chunk isn't slow.
+async def lifespan(app):
+    # Load Whisper and the LLM before the first call, so the first chunk isn't slow.
     await asyncio.to_thread(stt.load_model)
-    yield
+    async with httpx.AsyncClient() as client:
+        app.state.ollama = client
+        app.state.llm_ok = await llm.warm_up(client)
+        yield
 
 
 app = FastAPI(title="Scam Shield", lifespan=lifespan)
@@ -41,7 +46,8 @@ def samples():
 @app.websocket("/ws/call")
 async def call_session(ws: WebSocket):
     await ws.accept()
-    await ws.send_json({"type": "status", "stt": "ok", "llm": "idle", "offline": True})
+    llm_state = "ok" if ws.app.state.llm_ok else "down"
+    await ws.send_json({"type": "status", "stt": "ok", "llm": llm_state, "offline": True})
     stream = None  # background task feeding audio for the current call
 
     try:
@@ -91,29 +97,62 @@ async def _run_demo(ws: WebSocket, samples):
     transcriber = stt.Transcriber()
     duration = len(samples) / audio.SAMPLE_RATE
     heard = []  # every word so far, with call-time stamps
+    latest = {"rules": None, "llm": None}
+    llm_task = None
 
-    async for t_start, t_end, chunk in audio.stream_chunks(samples):
-        # Whisper blocks for ~0.5 s, so keep it off the event loop.
-        words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, t_end >= duration)
-        if not words:
-            continue
+    try:
+        async for t_start, t_end, chunk in audio.stream_chunks(samples):
+            # Whisper blocks for ~0.5 s, so keep it off the event loop.
+            words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, t_end >= duration)
+            if not words:
+                continue
 
-        text = "".join(w["word"] for w in words).strip()
-        await ws.send_json({"type": "transcript", "text": text, "t": round(words[0]["start"], 1)})
+            text = "".join(w["word"] for w in words).strip()
+            await ws.send_json({"type": "transcript", "text": text, "t": round(words[0]["start"], 1)})
 
-        heard.extend(words)
-        recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
-        result = rules.score(recent)
-        await ws.send_json({
-            "type": "score",
-            "risk": result["risk"],
-            "level": _level(result["risk"]),
-            "signals": result["signals"],
-            "reason": result["reason"],
-            "suggested_action": result["suggested_action"],
-        })
+            heard.extend(words)
+            recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
+            latest["rules"] = rules.score(recent)
+            await ws.send_json(_score_event(latest))
+
+            # One LLM call at a time. If it's still busy, skip this chunk rather than queue it.
+            if llm_task is None or llm_task.done():
+                llm_task = asyncio.create_task(_ask_llm(ws, recent, latest))
+
+        if llm_task:
+            await llm_task  # let the last answer land before the call ends
+    finally:
+        await _cancel(llm_task)  # stopped mid-call: don't leave the LLM request running
 
     await ws.send_json({"type": "status", "state": "ended"})
+
+
+async def _ask_llm(ws: WebSocket, transcript: str, latest: dict):
+    try:
+        latest["llm"] = await llm.score(transcript, ws.app.state.ollama)
+    except (httpx.HTTPError, ValueError):
+        # Ollama down or a bad answer: keep going on rules alone.
+        await ws.send_json({"type": "status", "llm": "down"})
+        return
+    await ws.send_json(_score_event(latest))
+
+
+def _score_event(latest: dict) -> dict:
+    """Merge rules and LLM: the higher risk wins, and its reason is the one shown.
+    Smoothing and the red latch come with fusion in a later part."""
+    results = [r for r in (latest["rules"], latest["llm"]) if r]
+    top = max(results, key=lambda r: r["risk"])
+    signals = sorted({s for r in results for s in r["signals"]})
+    return {
+        "type": "score",
+        "risk": top["risk"],
+        "level": _level(top["risk"]),
+        "signals": signals,
+        "reason": top["reason"],
+        "suggested_action": top["suggested_action"],
+        "rules_risk": latest["rules"]["risk"] if latest["rules"] else None,
+        "llm_risk": latest["llm"]["risk"] if latest["llm"] else None,
+    }
 
 
 def _level(risk: int) -> str:
