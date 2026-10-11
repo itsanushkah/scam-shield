@@ -11,8 +11,17 @@ import json
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 import audio
+import stt
 
-app = FastAPI(title="Scam Shield")
+
+@contextlib.asynccontextmanager
+async def lifespan(_app):
+    # Load Whisper before the first call, so the first chunk isn't slow.
+    await asyncio.to_thread(stt.load_model)
+    yield
+
+
+app = FastAPI(title="Scam Shield", lifespan=lifespan)
 
 
 @app.get("/health")
@@ -29,7 +38,7 @@ def samples():
 @app.websocket("/ws/call")
 async def call_session(ws: WebSocket):
     await ws.accept()
-    await ws.send_json({"type": "status", "stt": "idle", "llm": "idle", "offline": True})
+    await ws.send_json({"type": "status", "stt": "ok", "llm": "idle", "offline": True})
     stream = None  # background task feeding audio for the current call
 
     try:
@@ -75,10 +84,17 @@ async def call_session(ws: WebSocket):
 
 
 async def _run_demo(ws: WebSocket, samples):
-    """Stream a demo WAV at real-time speed. Each chunk will feed STT in a later part."""
-    async for t_start, t_end, _chunk in audio.stream_chunks(samples):
-        # Dev-only timing event until transcription replaces it.
-        await ws.send_json({"type": "chunk", "t_start": t_start, "t_end": t_end})
+    """Stream a demo WAV at real-time speed and send what's said as it's heard."""
+    transcriber = stt.Transcriber()
+    duration = len(samples) / audio.SAMPLE_RATE
+
+    async for t_start, t_end, chunk in audio.stream_chunks(samples):
+        # Whisper blocks for ~0.5 s, so keep it off the event loop.
+        words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, t_end >= duration)
+        if words:
+            text = "".join(w["word"] for w in words).strip()
+            await ws.send_json({"type": "transcript", "text": text, "t": round(words[0]["start"], 1)})
+
     await ws.send_json({"type": "status", "state": "ended"})
 
 
