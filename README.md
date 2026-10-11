@@ -15,7 +15,8 @@ Built solo at **c0mpiled-15** (Penn State, Oct 11 2026) for Track 1B, YC Request
 - **Live transcript** of the call in large, readable text.
 - **Risk meter** that moves from green ("Looks safe") to yellow ("Be careful") to red ("Likely a scam"), with the reason in plain words and tags like *Asks for money* or *Wants secrecy*.
 - **Full-screen warning** the moment a call turns red, with one instruction and big **Hang up** / **Keep listening** buttons.
-- **Two input modes:** **Live** listens through the laptop microphone (put a call on speaker next to it), and **Recording** plays one of the included test calls.
+- **Call summary** when the call ends: the verdict, when the warning fired, what the caller did, the phrases they used ("gift cards", "don't tell Mom"), and what to do now. Built from what was tracked during the call, so it's instant.
+- **Two input modes:** **Live** listens through the laptop microphone (put a call on speaker next to it), and **Recording** plays one of the included test calls out loud while analysing it.
 
 It looks at what the caller **wants**, not single words. A real grandson saying "Grandma, it's me" stays green. A real bank saying *"we will never ask for your PIN"* stays green. A fake bank demanding the code goes red.
 
@@ -123,11 +124,12 @@ backend/
   rules.py         rule scorer
   llm.py           Ollama client, prompt and JSON schema
   fusion.py        combine, smooth, latch
+  summary.py       end-of-call summary
   test_rules.py, test_fusion.py
 frontend/src/
   App.jsx          page layout, call header
   ControlPanel.jsx Live / Recording controls
-  PhoneFrame.jsx, RiskMeter.jsx, Transcript.jsx, AlertBanner.jsx
+  PhoneFrame.jsx, RiskMeter.jsx, Transcript.jsx, AlertBanner.jsx, CallSummary.jsx
   useCallSocket.js WebSocket hook
   mic.js, pcmWorklet.js   16 kHz mic capture
 samples/           test calls (WAV + per-line timing JSON) and their scripts
