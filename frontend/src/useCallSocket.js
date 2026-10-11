@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { startMic } from './mic.js'
+
 const RECONNECT_MS = 1000
 
 // One WebSocket to the backend's /ws/call. Reconnects on its own, so the
@@ -14,6 +16,14 @@ export function useCallSocket() {
   const [alert, setAlert] = useState(null) // set once, when the call first turns red
   const [error, setError] = useState(null)
   const [callNumber, setCallNumber] = useState(0)
+  const [micLevel, setMicLevel] = useState(0) // 0-1, live mode only
+  const stopMicRef = useRef(null)
+
+  const stopMic = useCallback(() => {
+    stopMicRef.current?.()
+    stopMicRef.current = null
+    setMicLevel(0)
+  }, [])
 
   useEffect(() => {
     let closedByUs = false
@@ -27,6 +37,7 @@ export function useCallSocket() {
         const msg = JSON.parse(e.data)
         if (msg.type === 'status') {
           if (msg.state) setCallState(msg.state)
+          if (msg.state === 'stopped' || msg.state === 'ended') stopMic()
           if (msg.stt) setConnected(true)
           if (msg.llm) setLlmState(msg.llm)
         } else if (msg.type === 'transcript') {
@@ -41,6 +52,7 @@ export function useCallSocket() {
       }
 
       ws.onclose = () => {
+        stopMic()
         setConnected(false)
         setCallState((s) => (s === 'started' ? 'stopped' : s))
         if (!closedByUs) retry = setTimeout(connect, RECONNECT_MS)
@@ -52,27 +64,47 @@ export function useCallSocket() {
       closedByUs = true
       clearTimeout(retry)
       wsRef.current?.close()
+      stopMic()
     }
-  }, [])
+  }, [stopMic])
 
   const send = useCallback((msg) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) wsRef.current.send(JSON.stringify(msg))
   }, [])
 
+  // mode 'demo' plays a sample file on the backend; 'live' streams this computer's mic.
   const start = useCallback(
-    (sample) => {
+    async (sample, mode = 'demo') => {
       setError(null)
       setTranscript([])
       setScore(null)
       setAlert(null)
       setCallNumber((n) => n + 1)
       setCallState('starting') // until the backend confirms; stops the old 'ended' showing
-      send({ type: 'start', mode: 'demo', sample })
+      stopMic()
+
+      if (mode === 'demo') {
+        send({ type: 'start', mode: 'demo', sample })
+        return
+      }
+
+      send({ type: 'start', mode: 'live' })
+      try {
+        stopMicRef.current = await startMic((frame) => {
+          if (wsRef.current?.readyState === WebSocket.OPEN) wsRef.current.send(frame)
+        }, setMicLevel)
+      } catch (e) {
+        setError(`Microphone: ${e.message}`)
+        send({ type: 'stop' })
+      }
     },
-    [send],
+    [send, stopMic],
   )
 
-  const stop = useCallback(() => send({ type: 'stop' }), [send])
+  const stop = useCallback(() => {
+    stopMic()
+    send({ type: 'stop' })
+  }, [send, stopMic])
 
-  return { connected, llmState, callState, callNumber, transcript, score, alert, error, start, stop }
+  return { connected, llmState, callState, callNumber, transcript, score, alert, error, micLevel, start, stop }
 }
