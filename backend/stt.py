@@ -17,6 +17,7 @@ MODEL_NAME = "base.en"
 SILENCE_RMS = 0.003  # chunks quieter than this are skipped (Whisper invents text on silence)
 EDGE_S = 0.15  # words ending this close to a chunk's end wait for the next chunk
 SLACK_S = 0.05  # timestamp jitter allowed when comparing against the last word
+REPEAT_WORDS = 3  # how many words back to look for a repeat across a chunk edge
 
 _model = None
 
@@ -35,6 +36,7 @@ class Transcriber:
 
     def __init__(self):
         self.cursor = 0.0  # call time where the last emitted word ended
+        self.tail = []  # last few emitted words, normalized, for catching repeats
 
     def feed(self, chunk: np.ndarray, t_start: float, t_end: float, is_last: bool) -> list[dict]:
         """Return the new words in this chunk as [{"word", "start", "end"}] in call time."""
@@ -59,7 +61,29 @@ class Transcriber:
                 if start < self.cursor - SLACK_S:
                     continue
                 if not is_last and end > t_end - EDGE_S:
-                    return words
+                    break
                 words.append({"word": w.word, "start": start, "end": end})
-                self.cursor = end
+            else:
+                continue
+            break
+
+        words = self._drop_repeat(words)
+        if words:
+            self.cursor = words[-1]["end"]
+            self.tail = (self.tail + [_norm(w["word"]) for w in words])[-REPEAT_WORDS:]
         return words
+
+    def _drop_repeat(self, words: list[dict]) -> list[dict]:
+        """Timestamps are loose at chunk edges, so the start of a chunk can repeat the
+        end of the last one ("Thanksgiving." then "giving."). Drop that repeat by text."""
+        new = [_norm(w["word"]) for w in words]
+        for k in range(min(REPEAT_WORDS, len(new), len(self.tail)), 0, -1):
+            if new[:k] == self.tail[-k:]:
+                return words[k:]
+        if new and self.tail and len(new[0]) >= 3 and self.tail[-1].endswith(new[0]):
+            return words[1:]
+        return words
+
+
+def _norm(word: str) -> str:
+    return "".join(c for c in word.lower() if c.isalnum() or c == "'")
