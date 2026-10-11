@@ -142,6 +142,7 @@ async def _run_call(ws: WebSocket, chunks, duration: float | None = None):
             recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
             result = rules.score(recent)
             record.note_rules(result)
+            record.note_text("".join(w["word"] for w in heard))
             await _send_score(ws, record, *scores.update(rules=result))
 
             # One LLM call at a time. If it's still busy, skip this chunk rather than queue it.
@@ -175,6 +176,7 @@ async def _send_score(ws: WebSocket, record: CallRecord, event: dict, alert: dic
     record.note_score(event, alert)
     # Keep adding to "what the caller is doing" for the rest of the call, even after it latches red.
     event["evidence"] = record.evidence(event["signals"]) if event["level"] != "green" else []
+    event["verify"] = record.verify(event["level"])  # "check it's really them", family claims only
     await ws.send_json(event)
     if alert:
         await ws.send_json(alert)
