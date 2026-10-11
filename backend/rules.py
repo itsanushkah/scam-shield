@@ -50,7 +50,9 @@ CATEGORIES = {
 # A request phrase right after "never ask" (etc.) is the opposite of a scam:
 # "we will never ask you for your PIN". Only checked for these categories.
 NEGATABLE = {"payment_request", "credential_request"}
-NEGATION = re.compile(r"\b(never|not|won'?t|don'?t|doesn'?t) (ask|need|request)\b[^.?!]{0,40}$")
+# Whisper scatters full stops mid-sentence ("never ask you for your pin. your password"),
+# so the check runs across them, limited to the next ~60 characters.
+NEGATION = re.compile(r"\b(never|not|won'?t|don'?t|doesn'?t) (ask|need|request)\b[^?!]{0,60}$")
 
 # Score by effective number of categories hit (strengths summed), interpolated.
 SCORE_BY_CATEGORIES = [0, 25, 55, 80, 92, 100]
