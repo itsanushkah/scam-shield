@@ -145,9 +145,11 @@ async def _ask_llm(ws: WebSocket, transcript: str, scores: fusion.Fusion):
     try:
         result = await llm.score(transcript, ws.app.state.ollama)
     except (httpx.HTTPError, ValueError):
-        # Ollama down or a bad answer: keep going on rules alone.
+        # Ollama down, too slow, or a bad answer: keep going on rules alone.
         await ws.send_json({"type": "status", "llm": "down"})
         return
+    # Tell the UI the AI check is back, in case an earlier call timed out.
+    await ws.send_json({"type": "status", "llm": "ok"})
     await _send_score(ws, *scores.update(llm=result))
 
 
