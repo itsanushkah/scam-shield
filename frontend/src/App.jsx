@@ -118,6 +118,11 @@ function DemoPanel({ call }) {
       <p className={`mt-1 text-sm ${call.connected ? 'text-emerald-700' : 'text-amber-700'}`}>
         {call.connected ? 'Backend connected' : 'Waiting for backend…'}
       </p>
+      {call.connected && (
+        <p className={`text-sm ${call.llmState === 'ok' ? 'text-emerald-700' : 'text-amber-700'}`}>
+          {call.llmState === 'ok' ? 'AI check on (Ollama)' : 'AI check off: using rules only'}
+        </p>
+      )}
 
       <label className="mt-4 block text-sm font-medium" htmlFor="sample">
         Call to play

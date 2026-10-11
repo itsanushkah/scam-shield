@@ -7,6 +7,7 @@ const RECONNECT_MS = 1000
 export function useCallSocket() {
   const wsRef = useRef(null)
   const [connected, setConnected] = useState(false)
+  const [llmState, setLlmState] = useState(null) // ok | down
   const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
   const [transcript, setTranscript] = useState([])
   const [score, setScore] = useState(null)
@@ -25,7 +26,8 @@ export function useCallSocket() {
         const msg = JSON.parse(e.data)
         if (msg.type === 'status') {
           if (msg.state) setCallState(msg.state)
-          else setConnected(true)
+          if (msg.stt) setConnected(true)
+          if (msg.llm) setLlmState(msg.llm)
         } else if (msg.type === 'transcript') {
           setTranscript((lines) => [...lines, { text: msg.text, t: msg.t }])
         } else if (msg.type === 'score') {
@@ -67,5 +69,5 @@ export function useCallSocket() {
 
   const stop = useCallback(() => send({ type: 'stop' }), [send])
 
-  return { connected, callState, callNumber, transcript, score, error, start, stop }
+  return { connected, llmState, callState, callNumber, transcript, score, error, start, stop }
 }
