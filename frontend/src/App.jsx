@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import AlertBanner from './AlertBanner.jsx'
+import ControlPanel from './ControlPanel.jsx'
 import PhoneFrame from './PhoneFrame.jsx'
 import RiskMeter from './RiskMeter.jsx'
 import Transcript from './Transcript.jsx'
@@ -15,9 +16,19 @@ export default function App() {
   const dismiss = () => setDismissedCall(call.callNumber)
 
   return (
-    <main className="flex min-h-screen flex-wrap items-center justify-center gap-8 bg-slate-200 p-4">
+    <main className="flex min-h-screen flex-wrap items-center justify-center gap-x-14 gap-y-8 bg-gradient-to-br from-slate-100 via-slate-200 to-emerald-100 p-4">
+      <div className="w-full max-w-sm">
+        <Brand llmOn={call.llmState === 'ok'} />
+        <ControlPanel call={call} />
+      </div>
+
       <PhoneFrame>
-        <CallHeader key={call.callNumber} live={live} ended={call.callState === 'ended' || call.callState === 'stopped'} />
+        <CallHeader
+          key={call.callNumber}
+          live={live}
+          ended={call.callState === 'ended' || call.callState === 'stopped'}
+          compact={call.score?.level === 'red'}
+        />
 
         <RiskMeter score={call.score} live={live} />
 
@@ -41,25 +52,68 @@ export default function App() {
           />
         )}
       </PhoneFrame>
-
-      <DemoPanel call={call} />
     </main>
   )
 }
 
-function CallHeader({ live, ended }) {
+function Brand({ llmOn }) {
+  return (
+    <header className="mb-6">
+      <div className="flex items-center gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow">
+          <svg viewBox="0 0 24 24" className="h-7 w-7 fill-current" aria-hidden="true">
+            <path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3Z" />
+          </svg>
+        </div>
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Scam Shield</h1>
+      </div>
+      <p className="mt-3 text-lg leading-snug text-slate-700">
+        Listens to a phone call and warns older adults about scams, in real time.
+      </p>
+      <ul className="mt-4 flex flex-wrap gap-2 text-sm font-medium">
+        <Badge>Speech-to-text on device</Badge>
+        <Badge muted={!llmOn}>{llmOn ? 'AI check on device' : 'AI check paused: using keyword rules'}</Badge>
+        <Badge>No internet needed</Badge>
+      </ul>
+    </header>
+  )
+}
+
+function Badge({ children, muted }) {
+  return (
+    <li
+      className={`rounded-full px-3 py-1 ring-1 ${muted ? 'bg-amber-50 text-amber-800 ring-amber-200' : 'bg-white/70 text-emerald-800 ring-emerald-200'}`}
+    >
+      {children}
+    </li>
+  )
+}
+
+// Shrinks while a warning is showing, so the meter and transcript keep their room.
+function CallHeader({ live, ended, compact }) {
   const seconds = useCallTimer(live)
+  const status = ended ? 'Call ended' : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
+
+  if (compact) {
+    return (
+      <header className="flex items-center gap-3 px-6 pb-3 pt-4">
+        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-700 text-xl font-semibold">?</div>
+        <div>
+          <p className="text-xl font-bold leading-tight">Unknown caller</p>
+          <p className="text-base tabular-nums text-slate-400">{status}</p>
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header className="px-6 pb-5 pt-6 text-center">
       <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-slate-700 text-3xl font-semibold">
         ?
       </div>
-      <h1 className="mt-3 text-3xl font-bold">Unknown caller</h1>
+      <p className="mt-3 text-3xl font-bold">Unknown caller</p>
       <p className="mt-1 text-xl text-slate-300">(814) 555-0142</p>
-      <p className="mt-1 text-lg tabular-nums text-slate-400">
-        {ended ? 'Call ended' : `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`}
-      </p>
+      <p className="mt-1 text-lg tabular-nums text-slate-400">{status}</p>
     </header>
   )
 }
@@ -93,107 +147,5 @@ function CallControls({ onEnd, disabled }) {
         </svg>
       </button>
     </footer>
-  )
-}
-
-// Operator controls for the demo. Sits outside the phone.
-function DemoPanel({ call }) {
-  const [samples, setSamples] = useState([])
-  const [sample, setSample] = useState('')
-  const [mode, setMode] = useState('demo') // demo: play a sample file | live: this computer's mic
-
-  useEffect(() => {
-    if (!call.connected) return
-    fetch('/samples')
-      .then((r) => r.json())
-      .then((d) => {
-        setSamples(d.samples)
-        setSample((s) => s || d.samples.find((n) => n.includes('short_scam_bail')) || d.samples[0] || '')
-      })
-      .catch(() => {})
-  }, [call.connected])
-
-  const live = call.callState === 'started'
-
-  return (
-    <aside className="w-72 rounded-2xl bg-white p-5 text-slate-800 shadow">
-      <h2 className="text-lg font-bold">Demo controls</h2>
-      <p className={`mt-1 text-sm ${call.connected ? 'text-emerald-700' : 'text-amber-700'}`}>
-        {call.connected ? 'Backend connected' : 'Waiting for backend…'}
-      </p>
-      {call.connected && (
-        <p className={`text-sm ${call.llmState === 'ok' ? 'text-emerald-700' : 'text-amber-700'}`}>
-          {call.llmState === 'ok' ? 'AI check on (Ollama)' : 'AI check off: using rules only'}
-        </p>
-      )}
-
-      <div className="mt-4 grid grid-cols-2 rounded-lg bg-slate-100 p-1 text-sm font-semibold" role="radiogroup" aria-label="Audio source">
-        {[
-          ['demo', 'Demo file'],
-          ['live', 'Live mic'],
-        ].map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            role="radio"
-            aria-checked={mode === value}
-            onClick={() => setMode(value)}
-            disabled={live}
-            className={`rounded-md py-1.5 ${mode === value ? 'bg-white shadow' : 'text-slate-500'}`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {mode === 'demo' ? (
-        <>
-          <label className="mt-4 block text-sm font-medium" htmlFor="sample">
-            Call to play
-          </label>
-          <select
-            id="sample"
-            value={sample}
-            onChange={(e) => setSample(e.target.value)}
-            disabled={live}
-            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2"
-          >
-            {samples.map((s) => (
-              <option key={s} value={s}>
-                {s.replace('.wav', '')}
-              </option>
-            ))}
-          </select>
-        </>
-      ) : (
-        <div className="mt-4">
-          <p className="text-sm text-slate-600">Play a call on your phone's speaker next to this computer.</p>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200" aria-label="Mic level">
-            <div className="h-full bg-emerald-500 transition-[width] duration-100" style={{ width: `${Math.round(call.micLevel * 100)}%` }} />
-          </div>
-        </div>
-      )}
-
-      <div className="mt-4 flex gap-2">
-        <button
-          type="button"
-          onClick={() => call.start(sample, mode)}
-          disabled={!call.connected || (mode === 'demo' && !sample) || live}
-          className="flex-1 rounded-lg bg-slate-900 px-3 py-2 font-semibold text-white disabled:opacity-40"
-        >
-          Start
-        </button>
-        <button
-          type="button"
-          onClick={call.stop}
-          disabled={!live}
-          className="flex-1 rounded-lg border border-slate-300 px-3 py-2 font-semibold disabled:opacity-40"
-        >
-          Stop
-        </button>
-      </div>
-
-      {call.error && <p className="mt-3 text-sm text-red-700">{call.error}</p>}
-    </aside>
   )
 }
