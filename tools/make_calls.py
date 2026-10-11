@@ -96,7 +96,7 @@ class Kokoro:
 
 def phone_line(x, sr):
     """Telephone-band filter (300-3400 Hz), light noise, then 16 kHz mono PCM16."""
-    x = resample_poly(x, 1, 3)  # 24k -> 8k (narrowband call)
+    x = resample_poly(x, 8000, sr)  # down to 8k (narrowband call); scipy reduces the ratio
     sos = butter(4, [300, 3400], btype="band", fs=8000, output="sos")
     x = sosfilt(sos, x)
     x = resample_poly(x, 2, 1)  # 8k -> 16k for the STT
