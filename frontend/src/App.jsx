@@ -100,6 +100,7 @@ function CallControls({ onEnd, disabled }) {
 function DemoPanel({ call }) {
   const [samples, setSamples] = useState([])
   const [sample, setSample] = useState('')
+  const [mode, setMode] = useState('demo') // demo: play a sample file | live: this computer's mic
 
   useEffect(() => {
     if (!call.connected) return
@@ -107,7 +108,7 @@ function DemoPanel({ call }) {
       .then((r) => r.json())
       .then((d) => {
         setSamples(d.samples)
-        setSample((s) => s || d.samples.find((n) => n.includes('grandson_bail')) || d.samples[0] || '')
+        setSample((s) => s || d.samples.find((n) => n.includes('short_scam_bail')) || d.samples[0] || '')
       })
       .catch(() => {})
   }, [call.connected])
@@ -126,28 +127,58 @@ function DemoPanel({ call }) {
         </p>
       )}
 
-      <label className="mt-4 block text-sm font-medium" htmlFor="sample">
-        Call to play
-      </label>
-      <select
-        id="sample"
-        value={sample}
-        onChange={(e) => setSample(e.target.value)}
-        disabled={live}
-        className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2"
-      >
-        {samples.map((s) => (
-          <option key={s} value={s}>
-            {s.replace('.wav', '')}
-          </option>
+      <div className="mt-4 grid grid-cols-2 rounded-lg bg-slate-100 p-1 text-sm font-semibold" role="radiogroup" aria-label="Audio source">
+        {[
+          ['demo', 'Demo file'],
+          ['live', 'Live mic'],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            role="radio"
+            aria-checked={mode === value}
+            onClick={() => setMode(value)}
+            disabled={live}
+            className={`rounded-md py-1.5 ${mode === value ? 'bg-white shadow' : 'text-slate-500'}`}
+          >
+            {label}
+          </button>
         ))}
-      </select>
+      </div>
+
+      {mode === 'demo' ? (
+        <>
+          <label className="mt-4 block text-sm font-medium" htmlFor="sample">
+            Call to play
+          </label>
+          <select
+            id="sample"
+            value={sample}
+            onChange={(e) => setSample(e.target.value)}
+            disabled={live}
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2"
+          >
+            {samples.map((s) => (
+              <option key={s} value={s}>
+                {s.replace('.wav', '')}
+              </option>
+            ))}
+          </select>
+        </>
+      ) : (
+        <div className="mt-4">
+          <p className="text-sm text-slate-600">Play a call on your phone's speaker next to this computer.</p>
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-200" aria-label="Mic level">
+            <div className="h-full bg-emerald-500 transition-[width] duration-100" style={{ width: `${Math.round(call.micLevel * 100)}%` }} />
+          </div>
+        </div>
+      )}
 
       <div className="mt-4 flex gap-2">
         <button
           type="button"
-          onClick={() => call.start(sample)}
-          disabled={!call.connected || !sample || live}
+          onClick={() => call.start(sample, mode)}
+          disabled={!call.connected || (mode === 'demo' && !sample) || live}
           className="flex-1 rounded-lg bg-slate-900 px-3 py-2 font-semibold text-white disabled:opacity-40"
         >
           Start
