@@ -17,7 +17,7 @@ export default function App() {
   return (
     <main className="flex min-h-screen flex-wrap items-center justify-center gap-8 bg-slate-200 p-4">
       <PhoneFrame>
-        <CallHeader key={call.callNumber} live={live} ended={call.callState === 'ended'} />
+        <CallHeader key={call.callNumber} live={live} ended={call.callState === 'ended' || call.callState === 'stopped'} />
 
         <RiskMeter score={call.score} live={live} />
 

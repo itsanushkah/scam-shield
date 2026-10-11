@@ -8,7 +8,7 @@ export function useCallSocket() {
   const wsRef = useRef(null)
   const [connected, setConnected] = useState(false)
   const [llmState, setLlmState] = useState(null) // ok | down
-  const [callState, setCallState] = useState('idle') // idle | started | stopped | ended
+  const [callState, setCallState] = useState('idle') // idle | starting | started | stopped | ended
   const [transcript, setTranscript] = useState([])
   const [score, setScore] = useState(null)
   const [alert, setAlert] = useState(null) // set once, when the call first turns red
@@ -66,6 +66,7 @@ export function useCallSocket() {
       setScore(null)
       setAlert(null)
       setCallNumber((n) => n + 1)
+      setCallState('starting') // until the backend confirms; stops the old 'ended' showing
       send({ type: 'start', mode: 'demo', sample })
     },
     [send],
