@@ -1,3 +1,19 @@
+import { useEffect, useState } from 'react'
+
+const formatTime = () => new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+
+// Wall-clock time for the status bar, refreshed every few seconds.
+function useClock() {
+  const [time, setTime] = useState(formatTime)
+
+  useEffect(() => {
+    const id = setInterval(() => setTime(formatTime()), 5000)
+    return () => clearInterval(id)
+  }, [])
+
+  return time
+}
+
 // Phone-shaped shell: body, notch and status bar. The call screen goes inside.
 export default function PhoneFrame({ children }) {
   return (
@@ -13,7 +29,7 @@ export default function PhoneFrame({ children }) {
 }
 
 function StatusBar() {
-  const time = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+  const time = useClock()
 
   return (
     <div className="flex items-center justify-between px-7 pb-1 pt-3 text-sm font-semibold">
