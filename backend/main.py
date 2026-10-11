@@ -11,7 +11,10 @@ import json
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 import audio
+import rules
 import stt
+
+WINDOW_S = 60  # score the last minute of the call
 
 
 @contextlib.asynccontextmanager
@@ -87,15 +90,35 @@ async def _run_demo(ws: WebSocket, samples):
     """Stream a demo WAV at real-time speed and send what's said as it's heard."""
     transcriber = stt.Transcriber()
     duration = len(samples) / audio.SAMPLE_RATE
+    heard = []  # every word so far, with call-time stamps
 
     async for t_start, t_end, chunk in audio.stream_chunks(samples):
         # Whisper blocks for ~0.5 s, so keep it off the event loop.
         words = await asyncio.to_thread(transcriber.feed, chunk, t_start, t_end, t_end >= duration)
-        if words:
-            text = "".join(w["word"] for w in words).strip()
-            await ws.send_json({"type": "transcript", "text": text, "t": round(words[0]["start"], 1)})
+        if not words:
+            continue
+
+        text = "".join(w["word"] for w in words).strip()
+        await ws.send_json({"type": "transcript", "text": text, "t": round(words[0]["start"], 1)})
+
+        heard.extend(words)
+        recent = "".join(w["word"] for w in heard if w["end"] >= t_end - WINDOW_S)
+        result = rules.score(recent)
+        await ws.send_json({
+            "type": "score",
+            "risk": result["risk"],
+            "level": _level(result["risk"]),
+            "signals": result["signals"],
+            "reason": result["reason"],
+            "suggested_action": result["suggested_action"],
+        })
 
     await ws.send_json({"type": "status", "state": "ended"})
+
+
+def _level(risk: int) -> str:
+    # Thresholds from CLAUDE.md. Fusion (smoothing + latch) replaces this in a later part.
+    return "red" if risk > 70 else "yellow" if risk >= 40 else "green"
 
 
 async def _cancel(task):
