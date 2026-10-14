@@ -4,6 +4,8 @@
 
 🏆 **1st place, Transpose Platform (YC Requests for Startups)** · 🥈 **2nd place, AGI Inc: Best Use of On-Device Intelligence** · c0mpiled-15, Penn State, Oct 2026
 
+▶️ **[Watch the demo video](https://youtu.be/asZDFEOGL-Q)**
+
 > 🔒 **100% on-device.** Speech-to-text and the AI both run on the laptop. **No internet needed**, and no audio or words ever leave the device.
 
 "Grandma, it's me. I've been arrested, I need bail money right now, don't tell Mom." Scam Shield hears the call as it happens, spots the pressure tactics, and tells the person what's going on and what to do: *"Don't send money. Hang up and call your family member on their usual number."*
